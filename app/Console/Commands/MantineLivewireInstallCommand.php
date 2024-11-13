@@ -1,12 +1,12 @@
 <?php
 
-namespace MantineLivewire\Commands;
+namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Process;
-use MantineLivewire\Support\ViteConfigMerger;
+use App\Support\ViteConfigMerger;
 use Illuminate\Support\Str;
 use RuntimeException;
 use function Laravel\Prompts\select;

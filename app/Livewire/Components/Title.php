@@ -1,6 +1,6 @@
 <?php
 
-namespace MantineLivewire\Components;
+namespace App\Livewire\Components;
 
 /**
  * Title component for displaying headings with customizable styles.

@@ -1,8 +1,8 @@
 <?php
 
-namespace MantineLivewire\Components\SwitchInput;
+namespace App\Livewire\Components\SwitchInput;
 
-use MantineLivewire\Components\MantineComponent;
+use App\Livewire\Components\MantineComponent;
 
 class Group extends MantineComponent
 {

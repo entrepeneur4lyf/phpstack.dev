@@ -1,6 +1,6 @@
 <?php
 
-namespace MantineLivewire\Components;
+namespace App\Livewire\Components;
 
 /**
  * Overlay component for creating a layer over other content.

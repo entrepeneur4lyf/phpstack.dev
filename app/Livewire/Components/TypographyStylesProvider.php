@@ -1,6 +1,6 @@
 <?php
 
-namespace MantineLivewire\Components;
+namespace App\Livewire\Components;
 
 /**
  * TypographyStylesProvider component for applying consistent text styling.

@@ -1,6 +1,6 @@
 <?php
 
-namespace MantineLivewire\Components;
+namespace App\Livewire\Components;
 
 class Combobox extends MantineComponent
 {

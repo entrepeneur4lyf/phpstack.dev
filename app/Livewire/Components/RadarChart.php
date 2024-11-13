@@ -1,6 +1,6 @@
 <?php
 
-namespace MantineLivewire\Components;
+namespace App\Livewire\Components;
 
 /**
  * RadarChart component for displaying data in a radar/spider chart format.

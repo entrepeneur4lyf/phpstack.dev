@@ -1,8 +1,8 @@
 <?php
 
-namespace MantineLivewire\Components\Radio;
+namespace App\Livewire\Components\Radio;
 
-use MantineLivewire\Components\MantineComponent;
+use App\Livewire\Components\MantineComponent;
 
 class Group extends MantineComponent
 {

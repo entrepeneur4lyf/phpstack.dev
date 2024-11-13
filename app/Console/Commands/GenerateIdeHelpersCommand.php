@@ -1,10 +1,10 @@
 <?php
 
-namespace MantineLivewire\Commands;
+namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
-use MantineLivewire\Support\ComponentRegistry;
+use App\Support\ComponentRegistry;
 use Barryvdh\LaravelIdeHelper\Console\GeneratorCommand;
 
 class GenerateIdeHelpersCommand extends GeneratorCommand

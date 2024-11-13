@@ -1,8 +1,8 @@
 <?php
 
-namespace MantineLivewire\Components\AppShell;
+namespace App\Livewire\Components\AppShell;
 
-use MantineLivewire\Components\MantineComponent;
+use App\Livewire\Components\MantineComponent;
 
 class Aside extends MantineComponent
 {

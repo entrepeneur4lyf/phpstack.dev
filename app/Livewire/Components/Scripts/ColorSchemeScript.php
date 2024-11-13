@@ -1,6 +1,6 @@
 <?php
 
-namespace MantineLivewire\Components\Scripts;
+namespace App\Livewire\Components\Scripts;
 
 use Illuminate\View\Component;
 

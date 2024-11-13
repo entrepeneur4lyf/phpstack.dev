@@ -2,7 +2,7 @@
 
 namespace App\Livewire\Layouts;
 
-use MantineLivewire\Components\Layouts\BaseLayout;
+use App\Livewire\Components\Layouts\BaseLayout;
 
 class FooterSocial extends BaseLayout
 {

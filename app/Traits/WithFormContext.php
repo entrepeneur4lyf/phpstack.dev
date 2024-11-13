@@ -1,8 +1,8 @@
 <?php
 
-namespace MantineLivewire\Traits;
+namespace App\Traits;
 
-use MantineLivewire\Support\FormContext;
+use App\Support\FormContext;
 
 trait WithFormContext
 {

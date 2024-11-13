@@ -1,6 +1,6 @@
 <?php
 
-namespace MantineLivewire\Traits;
+namespace App\Traits;
 
 trait WithMantineHooks
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace MantineLivewire\Components\Progress;
+namespace App\Livewire\Components\Progress;
 
-use MantineLivewire\Components\MantineComponent;
+use App\Livewire\Components\MantineComponent;
 
 class Root extends MantineComponent
 {

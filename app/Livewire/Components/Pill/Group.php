@@ -1,8 +1,8 @@
 <?php
 
-namespace MantineLivewire\Components\Pill;
+namespace App\Livewire\Components\Pill;
 
-use MantineLivewire\Components\MantineComponent;
+use App\Livewire\Components\MantineComponent;
 
 class Group extends MantineComponent
 {

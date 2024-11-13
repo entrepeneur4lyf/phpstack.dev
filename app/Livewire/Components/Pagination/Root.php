@@ -1,8 +1,8 @@
 <?php
 
-namespace MantineLivewire\Components\Pagination;
+namespace App\Livewire\Components\Pagination;
 
-use MantineLivewire\Components\MantineComponent;
+use App\Livewire\Components\MantineComponent;
 
 class Root extends MantineComponent
 {

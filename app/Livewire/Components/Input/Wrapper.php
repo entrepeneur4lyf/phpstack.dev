@@ -1,8 +1,8 @@
 <?php
 
-namespace MantineLivewire\Components\Input;
+namespace App\Livewire\Components\Input;
 
-use MantineLivewire\Components\MantineComponent;
+use App\Livewire\Components\MantineComponent;
 
 class Wrapper extends MantineComponent
 {

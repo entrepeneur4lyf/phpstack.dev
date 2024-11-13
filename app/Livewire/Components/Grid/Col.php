@@ -1,8 +1,8 @@
 <?php
 
-namespace MantineLivewire\Components\Grid;
+namespace App\Livewire\Components\Grid;
 
-use MantineLivewire\Components\MantineComponent;
+use App\Livewire\Components\MantineComponent;
 
 class Col extends MantineComponent
 {

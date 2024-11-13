@@ -1,8 +1,8 @@
 <?php
 
-namespace MantineLivewire\Components\PillsInput;
+namespace App\Livewire\Components\PillsInput;
 
-use MantineLivewire\Components\MantineComponent;
+use App\Livewire\Components\MantineComponent;
 
 class Field extends MantineComponent
 {

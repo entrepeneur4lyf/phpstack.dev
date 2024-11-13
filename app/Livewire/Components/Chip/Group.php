@@ -1,8 +1,8 @@
 <?php
 
-namespace MantineLivewire\Components\Chip;
+namespace App\Livewire\Components\Chip;
 
-use MantineLivewire\Components\MantineComponent;
+use App\Livewire\Components\MantineComponent;
 
 class Group extends MantineComponent
 {

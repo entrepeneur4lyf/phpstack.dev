@@ -1,8 +1,8 @@
 <?php
 
-namespace MantineLivewire\Components\ActionIcon;
+namespace App\Livewire\Components\ActionIcon;
 
-use MantineLivewire\Components\MantineComponent;
+use App\Livewire\Components\MantineComponent;
 
 class Group extends MantineComponent
 {

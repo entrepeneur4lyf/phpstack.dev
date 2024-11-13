@@ -1,8 +1,8 @@
 <?php
 
-namespace MantineLivewire\Components\Drawer;
+namespace App\Livewire\Components\Drawer;
 
-use MantineLivewire\Components\MantineComponent;
+use App\Livewire\Components\MantineComponent;
 
 class Root extends MantineComponent
 {

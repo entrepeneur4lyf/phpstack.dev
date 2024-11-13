@@ -1,8 +1,8 @@
 <?php
 
-namespace MantineLivewire\Components\Flip;
+namespace App\Livewire\Components\Flip;
 
-use MantineLivewire\Components\MantineComponent;
+use App\Livewire\Components\MantineComponent;
 
 /**
  * Flip.Target component - A trigger element that controls the flip state.

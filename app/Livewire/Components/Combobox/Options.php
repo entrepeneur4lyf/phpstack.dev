@@ -1,8 +1,8 @@
 <?php
 
-namespace MantineLivewire\Components\Combobox;
+namespace App\Livewire\Components\Combobox;
 
-use MantineLivewire\Components\MantineComponent;
+use App\Livewire\Components\MantineComponent;
 
 class Options extends MantineComponent
 {

@@ -1,15 +1,15 @@
 <?php
 
-namespace MantineLivewire;
+namespace App\Providers;
 
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
-use MantineLivewire\Commands\MantineLivewireInstallCommand;
-use MantineLivewire\Commands\InstallLayoutCommand;
-use MantineLivewire\Commands\GenerateIdeHelpersCommand;
-use MantineLivewire\Components\BaseLayout;
-use MantineLivewire\Components\ColorSchemeScript;
-use MantineLivewire\Support\ComponentRegistry;
+use App\Console\Commands\MantineLivewireInstallCommand;
+use App\Console\Commands\InstallLayoutCommand;
+use App\Console\Commands\GenerateIdeHelpersCommand;
+use App\Livewire\Components\BaseLayout;
+use App\Livewire\Components\ColorSchemeScript;
+use App\Support\ComponentRegistry;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
@@ -60,7 +60,7 @@ class MantineLivewireServiceProvider extends ServiceProvider
         // Register Livewire event listeners for Mantine hooks
         if (class_exists(\Livewire\Livewire::class)) {
             \Livewire\Livewire::listen('component.initialized', function ($component) {
-                if (in_array(\MantineLivewire\Traits\WithMantineHooks::class, class_uses_recursive($component))) {
+                if (in_array(\App\Traits\WithMantineHooks::class, class_uses_recursive($component))) {
                     $component->bootWithMantineHooks();
                 }
             });

@@ -1,8 +1,8 @@
 <?php
 
-namespace MantineLivewire\Components\Tabs;
+namespace App\Livewire\Components\Tabs;
 
-use MantineLivewire\Components\MantineComponent;
+use App\Livewire\Components\MantineComponent;
 
 class TabsList extends MantineComponent
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace MantineLivewire\Support;
+namespace App\Support;
 
 class Validators
 {

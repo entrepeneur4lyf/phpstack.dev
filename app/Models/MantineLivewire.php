@@ -1,5 +1,5 @@
 <?php
 
-namespace MantineLivewire;
+namespace App\Models;
 
 class MantineLivewire {}

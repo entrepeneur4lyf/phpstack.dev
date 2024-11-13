@@ -1,6 +1,6 @@
 <?php
 
-namespace MantineLivewire\Components;
+namespace App\Livewire\Components;
 
 /**
  * VisuallyHidden component - hides content visually while keeping it accessible to screen readers.

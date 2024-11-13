@@ -1,6 +1,6 @@
 <?php
 
-namespace MantineLivewire\Components;
+namespace App\Livewire\Components;
 
 /**
  * SemiCircleProgress component for displaying progress in a semi-circular shape.

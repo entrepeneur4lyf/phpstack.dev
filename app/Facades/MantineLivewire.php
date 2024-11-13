@@ -1,6 +1,6 @@
 <?php
 
-namespace MantineLivewire\Facades;
+namespace App\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
@@ -11,6 +11,6 @@ class MantineLivewire extends Facade
 {
     protected static function getFacadeAccessor(): string
     {
-        return MantineLivewire\MantineLivewire::class;
+        return App\Models\MantineLivewire::class;
     }
 }

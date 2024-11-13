@@ -1,8 +1,8 @@
 <?php
 
-namespace MantineLivewire\Traits;
+namespace App\Traits;
 
-use MantineLivewire\Components\RichTextEditor;
+use App\Livewire\Components\RichTextEditor;
 
 trait WithRichTextEditor
 {

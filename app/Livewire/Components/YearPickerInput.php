@@ -1,6 +1,6 @@
 <?php
 
-namespace MantineLivewire\Components;
+namespace App\Livewire\Components;
 
 /**
  * YearPickerInput component - An input field for selecting years with a dropdown calendar.

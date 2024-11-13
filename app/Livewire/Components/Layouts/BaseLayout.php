@@ -1,6 +1,6 @@
 <?php
 
-namespace MantineLivewire\Components\Layouts;
+namespace App\Livewire\Components\Layouts;
 
 use Livewire\Component;
 use Ijpatricio\Mingle\Concerns\InteractsWithMingles;

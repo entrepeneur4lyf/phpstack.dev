@@ -1,8 +1,8 @@
 <?php
 
-namespace MantineLivewire\Components\Stepper;
+namespace App\Livewire\Components\Stepper;
 
-use MantineLivewire\Components\MantineComponent;
+use App\Livewire\Components\MantineComponent;
 
 class Step extends MantineComponent
 {

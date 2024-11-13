@@ -1,12 +1,12 @@
 <?php
 
-namespace MantineLivewire\Commands;
+namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Process;
 use Illuminate\Support\Facades\Config;
-use MantineLivewire\Support\ComponentRegistry;
+use App\Support\ComponentRegistry;
 use function Laravel\Prompts\select;
 
 class InstallLayoutCommand extends Command

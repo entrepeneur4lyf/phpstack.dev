@@ -1,8 +1,8 @@
 <?php
 
-namespace MantineLivewire\Components\Slider;
+namespace App\Livewire\Components\Slider;
 
-use MantineLivewire\Components\MantineComponent;
+use App\Livewire\Components\MantineComponent;
 
 class Range extends MantineComponent
 {
