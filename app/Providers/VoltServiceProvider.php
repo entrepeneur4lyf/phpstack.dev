@@ -31,12 +31,12 @@ class VoltServiceProvider extends ServiceProvider
             resource_path('Livewire/views/volt/welcome'),
         ]);
 
-        // Register path aliases for easier referencing
-        Volt::alias([
+        // Register path mappings for easier referencing
+        config(['livewire.view_path' => [
             'layouts' => resource_path('Livewire/views/layouts'),
             'components' => resource_path('Livewire/views/components'),
             'auth' => resource_path('Livewire/views/volt/pages/auth'),
             'profile' => resource_path('Livewire/views/volt/profile'),
-        ]);
+        ]]);
     }
 }

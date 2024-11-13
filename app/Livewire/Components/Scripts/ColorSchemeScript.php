@@ -3,22 +3,22 @@
 namespace App\Livewire\Components\Scripts;
 
 use Illuminate\View\Component;
+use App\Support\ColorSchemeManager;
 
 class ColorSchemeScript extends Component
 {
+    protected ColorSchemeManager $manager;
+
+    public function __construct()
+    {
+        $this->manager = new ColorSchemeManager();
+    }
+
+    /**
+     * Get the view / contents that represents the component.
+     */
     public function render()
     {
-        return <<<'blade'
-<script>
-    // Check if user prefers dark mode
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    
-    // Get stored color scheme or use system preference
-    const colorScheme = localStorage.getItem('mantine-color-scheme') || (prefersDark ? 'dark' : 'light');
-    
-    // Apply color scheme
-    document.documentElement.setAttribute('data-mantine-color-scheme', colorScheme);
-</script>
-blade;
+        return $this->manager->getInitScript();
     }
 }

@@ -38,6 +38,9 @@ export default defineConfig({
             '@tiptap/react',
             '@tiptap/pm',
             '@tiptap/starter-kit',
+            'mantine-datatable',
+            '@formkit/auto-animate',
+            'motion/react',
         ],
     },
 });

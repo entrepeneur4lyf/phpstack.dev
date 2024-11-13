@@ -1,0 +1,140 @@
+/* Import our color scheme styles */
+@import '../../../../../css/color-scheme.css';
+
+.color-scheme-aware-component {
+  /* Use rem() function for consistent sizing */
+  padding: rem(24px);
+  margin: rem(16px);
+  border-radius: var(--mantine-radius-md);
+
+  /* Use CSS variables from our theme */
+  background: var(--mantine-color-body);
+  color: var(--mantine-color-text);
+  font-family: var(--mantine-font-family);
+
+  /* Use light-dark() function for color scheme specific values */
+  border: 1px solid light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
+
+  /* Use dark mixin for dark mode styles */
+  @mixin dark {
+    box-shadow: 0 0 rem(10px) rgba(0, 0, 0, 0.3);
+  }
+
+  /* Use light mixin for light mode styles */
+  @mixin light {
+    box-shadow: 0 0 rem(10px) rgba(0, 0, 0, 0.1);
+  }
+
+  /* Use hover mixin for better touch device support */
+  @mixin hover {
+    background: light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-6));
+  }
+
+  /* Use reduce-motion mixin for accessibility */
+  transition: all 0.2s ease;
+  @mixin reduce_motion {
+    transition: none;
+  }
+
+  /* Responsive styles using our breakpoint mixins */
+  @mixin smaller_than md {
+    padding: rem(16px);
+  }
+
+  @mixin larger_than lg {
+    padding: rem(32px);
+  }
+}
+
+/* Dark mode only element */
+.dark-mode-element {
+  display: none;
+  padding: rem(12px);
+  border-radius: var(--mantine-radius-sm);
+  background: var(--mantine-color-dark-6);
+
+  @mixin dark {
+    display: block;
+    color: var(--mantine-color-blue-4);
+  }
+}
+
+/* Light mode only element */
+.light-mode-element {
+  display: none;
+  padding: rem(12px);
+  border-radius: var(--mantine-radius-sm);
+  background: var(--mantine-color-gray-1);
+
+  @mixin light {
+    display: block;
+    color: var(--mantine-color-blue-6);
+  }
+}
+
+/* Color scheme transition handling */
+.color-scheme-transition {
+  margin-top: rem(20px);
+  padding: rem(16px);
+  border-radius: var(--mantine-radius-sm);
+  background: light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-7));
+  
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+
+  /* Disable transitions when color scheme changes if keepTransitions is false */
+  [data-mantine-color-scheme-transitions="false"] & {
+    transition: none;
+  }
+
+  @mixin reduce_motion {
+    transition: none;
+  }
+}
+
+/* Button with CSS variables for variants */
+.button {
+  --button-height: rem(36px);
+  --button-padding-x: rem(18px);
+  --button-color: var(--mantine-color-white);
+
+  height: var(--button-height);
+  padding: 0 var(--button-padding-x);
+  color: var(--button-color);
+  background: light-dark(var(--mantine-color-blue-6), var(--mantine-color-blue-8));
+  border-radius: var(--mantine-radius-sm);
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  outline: none;
+
+  @mixin dark {
+    --button-color: var(--mantine-color-dark-0);
+  }
+
+  @mixin hover {
+    background: light-dark(var(--mantine-color-blue-7), var(--mantine-color-blue-9));
+  }
+
+  &[data-size="xs"] {
+    --button-height: rem(24px);
+    --button-padding-x: rem(12px);
+    font-size: rem(12px);
+  }
+
+  &[data-size="xl"] {
+    --button-height: rem(48px);
+    --button-padding-x: rem(24px);
+    font-size: rem(16px);
+  }
+
+  /* Transition handling */
+  transition: background-color 0.2s, transform 0.1s;
+
+  @mixin reduce_motion {
+    transition: none;
+  }
+
+  [data-mantine-color-scheme-transitions="false"] & {
+    transition: none;
+  }
+}
