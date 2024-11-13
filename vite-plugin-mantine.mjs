@@ -41,7 +41,7 @@ export function mantinePlugin() {
 
             // Add component index.js files to input
             const componentInputs = components.map(
-                component => `resources/js/Components/${component}/index.js`
+                component => `resources/MantineLiveWire/custom/react/components/${component}/index.js`
             );
 
             // Update Laravel plugin input
@@ -75,10 +75,10 @@ export function mantinePlugin() {
                 // Import components based on manifest
                 components.forEach(component => {
                     imports.push(
-                        `import ${component} from './Components/${component}/${component}';`
+                        `import ${component} from './components/${component}/${component}';`
                     );
                     registrations.push(
-                        `mingle('resources/js/Components/${component}/index.js', ${component});`
+                        `mingle('resources/MantineLiveWire/custom/react/components/${component}/index.js', ${component});`
                     );
                 });
 

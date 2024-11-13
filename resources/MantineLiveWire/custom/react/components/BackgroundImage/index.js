@@ -1,4 +1,4 @@
 import mingle from '@mingle/mingleReact';
 import BackgroundImage from './BackgroundImage';
 
-mingle('resources/js/Components/BackgroundImage/index.js', BackgroundImage);
+mingle('resources/MantineLiveWire/custom/react/components/BackgroundImage/index.js', BackgroundImage);

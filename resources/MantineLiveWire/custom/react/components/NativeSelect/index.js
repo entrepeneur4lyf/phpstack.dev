@@ -1,4 +1,4 @@
 import mingle from '@mingle/mingleReact';
 import NativeSelect from './NativeSelect';
 
-mingle('resources/js/Components/NativeSelect/index.js', NativeSelect);
+mingle('resources/MantineLiveWire/custom/react/components/NativeSelect/index.js', NativeSelect);

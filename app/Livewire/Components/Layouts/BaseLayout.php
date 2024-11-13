@@ -12,7 +12,7 @@ class BaseLayout extends Component implements HasMingles
 
     public function component(): string
     {
-        return 'resources/js/Components/Custom/BaseLayout/index.js';
+        return 'resources/MantineLiveWire/custom/react/BaseLayout/index.js';
     }
 
     public function mingleData()
@@ -24,6 +24,6 @@ class BaseLayout extends Component implements HasMingles
 
     public function render()
     {
-        return view('mantinelivewire::layouts.base');
+        return view('mantinelivewire-blade::base');
     }
 }

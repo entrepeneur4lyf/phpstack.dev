@@ -1,4 +1,4 @@
 import mingle from '@mingle/mingleReact';
 import FileInput from './FileInput';
 
-mingle('resources/js/Components/FileInput/index.js', FileInput);
+mingle('resources/MantineLiveWire/custom/react/components/FileInput/index.js', FileInput);

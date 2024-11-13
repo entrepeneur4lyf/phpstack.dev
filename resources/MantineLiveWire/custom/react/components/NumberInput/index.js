@@ -1,4 +1,4 @@
 import mingle from '@mingle/mingleReact';
 import NumberInput from './NumberInput';
 
-mingle('resources/js/Components/NumberInput/index.js', NumberInput);
+mingle('resources/MantineLiveWire/custom/react/components/NumberInput/index.js', NumberInput);

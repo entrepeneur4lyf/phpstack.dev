@@ -1,4 +1,4 @@
 import mingle from '@mingle/mingleReact';
 import AppShell from './AppShell';
 
-mingle('resources/js/Components/AppShell/index.js', AppShell);
+mingle('resources/MantineLiveWire/custom/react/components/AppShell/index.js', AppShell);

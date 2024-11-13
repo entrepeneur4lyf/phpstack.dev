@@ -1,4 +1,4 @@
 import mingle from '@mingle/mingleReact';
 import CodeHighlight from './CodeHighlight';
 
-mingle('resources/js/Components/CodeHighlight/index.js', CodeHighlight);
+mingle('resources/MantineLiveWire/custom/react/components/CodeHighlight/index.js', CodeHighlight);

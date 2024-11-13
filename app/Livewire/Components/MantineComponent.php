@@ -6,7 +6,7 @@ use Ijpatricio\Mingle\Concerns\InteractsWithMingles;
 use Ijpatricio\Mingle\Contracts\HasMingles;
 use Livewire\Component;
 use Illuminate\Support\Facades\Config;
-use MantineLivewire\Support\ComponentRegistry;
+use App\Support\ComponentRegistry;
 
 /**
  * Base Mantine Component
@@ -139,7 +139,15 @@ abstract class MantineComponent extends Component implements HasMingles
      */
     public function __construct()
     {
+        // Get full class name without namespace
+        $fullClassName = str_replace('App\\Livewire\\Components\\', '', get_class($this));
+        
+        // Convert path separators to directory separators
+        $componentPath = str_replace('\\', '/', $fullClassName);
+        
+        // Store the last part as component name for registry
         $this->componentName = class_basename($this);
+        
         $this->loadDefaultProps();
         $this->uuid = "mantine" . md5(serialize($this));
     }
@@ -164,7 +172,13 @@ abstract class MantineComponent extends Component implements HasMingles
         // Register the component when it's used
         ComponentRegistry::register($this->componentName);
         
-        return "resources/js/Components/{$this->componentName}/index.js";
+        // Get full class name without namespace
+        $fullClassName = str_replace('App\\Livewire\\Components\\', '', get_class($this));
+        
+        // Convert path separators to directory separators
+        $componentPath = str_replace('\\', '/', $fullClassName);
+        
+        return "resources/MantineLiveWire/custom/react/components/{$componentPath}/index.js";
     }
 
     /**
@@ -232,7 +246,7 @@ abstract class MantineComponent extends Component implements HasMingles
      */
     public function render()
     {
-        return view('mantine::components.base')->with([
+        return view('mantinelivewire-blade::base')->with([
             'uuid' => $this->uuid,
         ]);
     }

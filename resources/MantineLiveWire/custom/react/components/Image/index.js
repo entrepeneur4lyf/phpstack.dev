@@ -1,4 +1,4 @@
 import mingle from '@mingle/mingleReact';
 import Image from './Image';
 
-mingle('resources/js/Components/Image/index.js', Image);
+mingle('resources/MantineLiveWire/custom/react/components/Image/index.js', Image);

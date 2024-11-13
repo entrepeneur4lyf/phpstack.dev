@@ -1,4 +1,4 @@
 import mingle from '@mingle/mingleReact';
 import Pill from './Pill';
 
-mingle('resources/js/Components/Pill/index.js', Pill);
+mingle('resources/MantineLiveWire/custom/react/components/Pill/index.js', Pill);

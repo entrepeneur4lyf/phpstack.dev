@@ -1,4 +1,4 @@
 import mingle from '@mingle/mingleReact';
 import Chip from './Chip';
 
-mingle('resources/js/Components/Chip/index.js', Chip);
+mingle('resources/MantineLiveWire/custom/react/components/Chip/index.js', Chip);

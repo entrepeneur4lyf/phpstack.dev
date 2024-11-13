@@ -1,4 +1,4 @@
 import mingle from '@mingle/mingleReact';
 import Progress from './Progress';
 
-mingle('resources/js/Components/Progress/index.js', Progress);
+mingle('resources/MantineLiveWire/custom/react/components/Progress/index.js', Progress);

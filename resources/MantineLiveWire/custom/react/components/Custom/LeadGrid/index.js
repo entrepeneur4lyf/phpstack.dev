@@ -1,4 +1,4 @@
 import mingle from '@mingle/mingleReact';
 import LeadGrid from './LeadGrid';
 
-mingle('resources/js/Components/Custom/LeadGrid/index.js', LeadGrid);
+mingle('resources/MantineLiveWire/custom/react/components/Custom/LeadGrid/index.js', LeadGrid);

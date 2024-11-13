@@ -1,4 +1,4 @@
 import mingle from '@mingle/mingleReact';
 import RichTextEditor from './RichTextEditor';
 
-mingle('resources/js/Components/RichTextEditor/index.js', RichTextEditor);
+mingle('resources/MantineLiveWire/custom/react/components/RichTextEditor/index.js', RichTextEditor);

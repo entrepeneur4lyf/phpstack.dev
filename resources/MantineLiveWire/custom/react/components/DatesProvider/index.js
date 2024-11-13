@@ -1,4 +1,4 @@
 import mingle from '@mingle/mingleReact';
 import DatesProvider from './DatesProvider';
 
-mingle('resources/js/Components/DatesProvider/index.js', DatesProvider);
+mingle('resources/MantineLiveWire/custom/react/components/DatesProvider/index.js', DatesProvider);

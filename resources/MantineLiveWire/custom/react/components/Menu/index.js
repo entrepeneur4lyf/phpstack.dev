@@ -1,4 +1,4 @@
 import mingle from '@mingle/mingleReact';
 import Menu from './Menu';
 
-mingle('resources/js/Components/Menu/index.js', Menu);
+mingle('resources/MantineLiveWire/custom/react/components/Menu/index.js', Menu);

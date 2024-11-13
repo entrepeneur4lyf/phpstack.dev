@@ -1,4 +1,4 @@
 import mingle from '@mingle/mingleReact';
 import DatePickerInput from './DatePickerInput';
 
-mingle('resources/js/Components/DatePickerInput/index.js', DatePickerInput);
+mingle('resources/MantineLiveWire/custom/react/components/DatePickerInput/index.js', DatePickerInput);

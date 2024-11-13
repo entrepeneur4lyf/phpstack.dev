@@ -1,4 +1,4 @@
 import mingle from '@mingle/mingleReact';
 import Slider from './Slider';
 
-mingle('resources/js/Components/Slider/index.js', Slider);
+mingle('resources/MantineLiveWire/custom/react/components/Slider/index.js', Slider);

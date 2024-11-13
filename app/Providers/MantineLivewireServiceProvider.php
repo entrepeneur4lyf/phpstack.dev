@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use App\Console\Commands\MantineLivewireInstallCommand;
 use App\Console\Commands\InstallLayoutCommand;
-use App\Console\Commands\GenerateIdeHelpersCommand;
 use App\Livewire\Components\BaseLayout;
 use App\Livewire\Components\ColorSchemeScript;
 use App\Support\ComponentRegistry;
@@ -15,7 +14,6 @@ use Illuminate\Support\Str;
 
 class MantineLivewireServiceProvider extends ServiceProvider
 {
-
     /**
      * Bootstrap any application services.
      */
@@ -49,8 +47,8 @@ class MantineLivewireServiceProvider extends ServiceProvider
     {
         $prefix = config('mantinelivewire.prefix', 'mantine');
 
-        // Register components in the MantineLivewire namespace
-        Blade::componentNamespace('MantineLivewire\\Components', $prefix);
+        // Register UI Components
+        Blade::componentNamespace('App\\Livewire\\Components', $prefix);
 
         // Register view components
         Blade::component('color-scheme-script', ColorSchemeScript::class);
@@ -67,7 +65,20 @@ class MantineLivewireServiceProvider extends ServiceProvider
         }
 
         // Register views
-        $this->loadViewsFrom(__DIR__.'/../resources/views', 'mantinelivewire');
+        $mantinePath = resource_path('MantineLiveWire');
+        
+        // Register blade templates
+        $this->loadViewsFrom("{$mantinePath}/custom/blade", 'mantinelivewire-blade');
+        
+        // Register React components
+        $this->loadViewsFrom("{$mantinePath}/custom/react", 'mantinelivewire-react');
+        
+        // Register example components and layouts
+        $this->loadViewsFrom("{$mantinePath}/custom/examples", 'mantinelivewire-examples');
+        $this->loadViewsFrom("{$mantinePath}/layouts", 'mantinelivewire-layout-examples');
+        
+        // Register base views
+        $this->loadViewsFrom("{$mantinePath}/views", 'mantinelivewire');
     }
 
     public function registerBladeDirectives()
@@ -93,7 +104,7 @@ class MantineLivewireServiceProvider extends ServiceProvider
             [$name, $functionArguments] = $directiveArguments;
 
             // Build function "uses" to inject extra external variables
-            $uses = Arr::except(array_flip($directiveArguments), [$name, $functionArguments]);
+            $uses = \Arr::except(array_flip($directiveArguments), [$name, $functionArguments]);
             $uses = array_flip($uses);
             array_push($uses, '$__env');
             array_push($uses, '$__bladeCompiler');
@@ -116,11 +127,12 @@ class MantineLivewireServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register any package services.
+     * Register any application services.
      */
     public function register(): void
     {
-        $this->mergeConfigFrom(__DIR__ . '/../config/mantinelivewire.php', 'mantinelivewire');
+        // Register the main class as a singleton
+        $this->app->singleton(\App\Models\MantineLivewire::class);
     }
 
     /**
@@ -138,29 +150,10 @@ class MantineLivewireServiceProvider extends ServiceProvider
      */
     protected function bootForConsole(): void
     {
-        // Publishing the configuration file
-        $this->publishes([
-            __DIR__ . '/../config/mantinelivewire.php' => config_path('mantinelivewire.php'),
-        ], 'mantinelivewire.config');
-
-        // Publishing assets
-        $this->publishes([
-            __DIR__.'/../resources/js/Components' => resource_path('js/Components'),
-            __DIR__.'/../resources/css' => resource_path('css/vendor/mantinelivewire'),
-            __DIR__.'/../stubs/vite.config.mjs' => base_path('vite.config.mjs'),
-            __DIR__.'/../stubs/vite-plugin-mantine.mjs' => base_path('vite-plugin-mantine.mjs'),
-        ], 'mantinelivewire-assets');
-
-        // Publishing stubs
-        $this->publishes([
-            __DIR__.'/../stubs' => base_path('stubs/mantinelivewire'),
-        ], 'mantinelivewire-stubs');
-
         // Register commands
         $this->commands([
             MantineLivewireInstallCommand::class,
-            InstallLayoutCommand::class,
-            GenerateIdeHelpersCommand::class
+            InstallLayoutCommand::class
         ]);
     }
 }

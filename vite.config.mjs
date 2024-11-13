@@ -5,23 +5,47 @@ import mantinePlugin from './vite-plugin-mantine.mjs';
 
 export default defineConfig({
     plugins: [
-        laravel({
-            input: [
-                'resources/css/app.css',
-                'resources/js/app.js',
-                'resources/js/mantineHooks.js',
-            ],
-            refresh: true,
-        }),
-        react(),
-        mantinePlugin(),
+        vue({
+                            template: {
+                                transformAssetUrls: {
+                                    base: null,
+                                    includeAbsolute: false,
+                                },
+                            },
+                        }),
     ],
     resolve: {
         alias: {
-            '@': '/resources/js',
         },
     },
     optimizeDeps: {
-        include: ['@mantine/core', '@mantine/hooks'],
+        include: [
+            '@mantine/core',
+            '@mantine/hooks',
+            '@mantine/form',
+            '@mantine/dates',
+            '@mantine/notifications',
+            '@mantine/code-highlight',
+            '@mantine/tiptap',
+            '@mantine/carousel',
+            '@mantine/spotlight',
+            '@mantine/modals',
+            '@mantine/nprogress',
+            '@tiptap/react',
+            '@tiptap/pm',
+            '@tiptap/starter-kit',
+            '@tiptap/suggestion',
+            'highlight.js',
+        ],
     },
+                        template: {
+                            transformAssetUrls: {
+                                base: null,
+                                includeAbsolute: false,
+                            },
+                    template: {
+                        transformAssetUrls: {
+                            base: null,
+                            includeAbsolute: false,
+                        },
 });

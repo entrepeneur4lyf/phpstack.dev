@@ -1,4 +1,4 @@
 import mingle from '@mingle/mingleReact';
 import DonutChart from './DonutChart';
 
-mingle('resources/js/Components/DonutChart/index.js', DonutChart);
+mingle('resources/MantineLiveWire/custom/react/components/DonutChart/index.js', DonutChart);

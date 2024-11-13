@@ -1,4 +1,4 @@
 import mingle from '@mingle/mingleReact';
 import NavbarSimple from './NavbarSimple';
 
-mingle('resources/js/Components/Custom/NavbarSimple/index.js', NavbarSimple);
+mingle('resources/MantineLiveWire/custom/react/components/Custom/NavbarSimple/index.js', NavbarSimple);

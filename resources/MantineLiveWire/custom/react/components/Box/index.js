@@ -1,4 +1,4 @@
 import mingle from '@mingle/mingleReact';
 import Box from './Box';
 
-mingle('resources/js/Components/Box/index.js', Box);
+mingle('resources/MantineLiveWire/custom/react/components/Box/index.js', Box);

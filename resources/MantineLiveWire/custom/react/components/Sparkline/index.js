@@ -1,4 +1,4 @@
 import mingle from '@mingle/mingleReact';
 import Sparkline from './Sparkline';
 
-mingle('resources/js/Components/Sparkline/index.js', Sparkline);
+mingle('resources/MantineLiveWire/custom/react/components/Sparkline/index.js', Sparkline);

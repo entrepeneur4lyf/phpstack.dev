@@ -1,4 +1,4 @@
 import mingle from '@mingle/mingleReact';
 import TimeInput from './TimeInput';
 
-mingle('resources/js/Components/TimeInput/index.js', TimeInput);
+mingle('resources/MantineLiveWire/custom/react/components/TimeInput/index.js', TimeInput);

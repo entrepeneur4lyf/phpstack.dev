@@ -1,4 +1,4 @@
 import mingle from '@mingle/mingleReact';
 import Flex from './Flex';
 
-mingle('resources/js/Components/Flex/index.js', Flex);
+mingle('resources/MantineLiveWire/custom/react/components/Flex/index.js', Flex);

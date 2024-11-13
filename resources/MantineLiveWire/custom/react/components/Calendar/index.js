@@ -1,4 +1,4 @@
 import mingle from '@mingle/mingleReact';
 import Calendar from './Calendar';
 
-mingle('resources/js/Components/Calendar/index.js', Calendar);
+mingle('resources/MantineLiveWire/custom/react/components/Calendar/index.js', Calendar);

@@ -62,7 +62,17 @@ function Carousel({ wire, mingleData }) {
     );
 }
 
-// Add Slide component as a static property
-Carousel.Slide = MantineCarousel.Slide;
+Carousel.Slide = function CarouselSlide({ wire, mingleData, children }) {
+    const { size, gap } = mingleData;
+    
+    return (
+        <MantineCarousel.Slide
+            size={size}
+            gap={gap}
+        >
+            {children}
+        </MantineCarousel.Slide>
+    );
+};
 
 export default Carousel;

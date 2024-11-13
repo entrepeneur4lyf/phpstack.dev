@@ -1,4 +1,4 @@
 import mingle from '@mingle/mingleReact';
 import MonthPickerInput from './MonthPickerInput';
 
-mingle('resources/js/Components/MonthPickerInput/index.js', MonthPickerInput);
+mingle('resources/MantineLiveWire/custom/react/components/MonthPickerInput/index.js', MonthPickerInput);

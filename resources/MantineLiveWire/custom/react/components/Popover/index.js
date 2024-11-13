@@ -1,4 +1,4 @@
 import mingle from '@mingle/mingleReact';
 import Popover from './Popover';
 
-mingle('resources/js/Components/Popover/index.js', Popover);
+mingle('resources/MantineLiveWire/custom/react/components/Popover/index.js', Popover);

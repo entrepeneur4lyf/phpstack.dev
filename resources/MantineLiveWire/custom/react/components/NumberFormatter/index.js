@@ -1,4 +1,4 @@
 import mingle from '@mingle/mingleReact';
 import NumberFormatter from './NumberFormatter';
 
-mingle('resources/js/Components/NumberFormatter/index.js', NumberFormatter);
+mingle('resources/MantineLiveWire/custom/react/components/NumberFormatter/index.js', NumberFormatter);

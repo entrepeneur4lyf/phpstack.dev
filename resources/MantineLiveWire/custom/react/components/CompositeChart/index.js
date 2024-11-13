@@ -1,4 +1,4 @@
 import mingle from '@mingle/mingleReact';
 import CompositeChart from './CompositeChart';
 
-mingle('resources/js/Components/CompositeChart/index.js', CompositeChart);
+mingle('resources/MantineLiveWire/custom/react/components/CompositeChart/index.js', CompositeChart);

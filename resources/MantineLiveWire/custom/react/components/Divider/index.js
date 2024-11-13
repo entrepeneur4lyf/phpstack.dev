@@ -1,4 +1,4 @@
 import mingle from '@mingle/mingleReact';
 import Divider from './Divider';
 
-mingle('resources/js/Components/Divider/index.js', Divider);
+mingle('resources/MantineLiveWire/custom/react/components/Divider/index.js', Divider);

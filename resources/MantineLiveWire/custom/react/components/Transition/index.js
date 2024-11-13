@@ -1,4 +1,4 @@
 import mingle from '@mingle/mingleReact';
 import Transition from './Transition';
 
-mingle('resources/js/Components/Transition/index.js', Transition);
+mingle('resources/MantineLiveWire/custom/react/components/Transition/index.js', Transition);

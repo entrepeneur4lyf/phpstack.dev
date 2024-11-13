@@ -1,4 +1,4 @@
 import mingle from '@mingle/mingleReact';
 import RingProgress from './RingProgress';
 
-mingle('resources/js/Components/RingProgress/index.js', RingProgress);
+mingle('resources/MantineLiveWire/custom/react/components/RingProgress/index.js', RingProgress);

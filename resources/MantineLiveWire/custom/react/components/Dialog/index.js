@@ -1,4 +1,4 @@
 import mingle from '@mingle/mingleReact';
 import Dialog from './Dialog';
 
-mingle('resources/js/Components/Dialog/index.js', Dialog);
+mingle('resources/MantineLiveWire/custom/react/components/Dialog/index.js', Dialog);

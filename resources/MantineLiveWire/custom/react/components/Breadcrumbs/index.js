@@ -1,4 +1,4 @@
 import mingle from '@mingle/mingleReact';
 import Breadcrumbs from './Breadcrumbs';
 
-mingle('resources/js/Components/Breadcrumbs/index.js', Breadcrumbs);
+mingle('resources/MantineLiveWire/custom/react/components/Breadcrumbs/index.js', Breadcrumbs);

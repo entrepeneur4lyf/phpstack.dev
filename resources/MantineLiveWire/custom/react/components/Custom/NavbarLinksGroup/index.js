@@ -1,4 +1,4 @@
 import mingle from '@mingle/mingleReact';
 import NavbarLinksGroup from './NavbarLinksGroup';
 
-mingle('resources/js/Components/Custom/NavbarLinksGroup/index.js', NavbarLinksGroup);
+mingle('resources/MantineLiveWire/custom/react/components/Custom/NavbarLinksGroup/index.js', NavbarLinksGroup);

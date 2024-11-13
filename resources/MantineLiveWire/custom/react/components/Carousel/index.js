@@ -1,4 +1,4 @@
 import mingle from '@mingle/mingleReact';
 import Carousel from './Carousel';
 
-mingle('resources/js/Components/Carousel/index.js', Carousel);
+mingle('resources/MantineLiveWire/custom/react/components/Carousel/index.js', Carousel);
