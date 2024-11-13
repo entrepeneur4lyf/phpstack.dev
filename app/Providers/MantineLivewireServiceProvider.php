@@ -66,6 +66,7 @@ class MantineLivewireServiceProvider extends ServiceProvider
 
         // Register views
         $mantinePath = resource_path('MantineLiveWire');
+        $livewirePath = resource_path('Livewire');
         
         // Register blade templates
         $this->loadViewsFrom("{$mantinePath}/custom/blade", 'mantinelivewire-blade');
@@ -79,6 +80,12 @@ class MantineLivewireServiceProvider extends ServiceProvider
         
         // Register base views
         $this->loadViewsFrom("{$mantinePath}/views", 'mantinelivewire');
+
+        // Register Livewire views
+        $this->loadViewsFrom("{$livewirePath}/views", 'livewire');
+        $this->loadViewsFrom("{$livewirePath}/views/layouts", 'livewire-layouts');
+        $this->loadViewsFrom("{$livewirePath}/views/components", 'livewire-components');
+        $this->loadViewsFrom("{$livewirePath}/views/volt", 'livewire-volt');
     }
 
     public function registerBladeDirectives()

@@ -23,47 +23,62 @@ $login = function () {
 ?>
 
 <div>
-    <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
+    <x-mantine-paper shadow="md" p="xl" radius="md" mx="auto" maw="400">
+        <x-mantine-stack>
+            <!-- Header -->
+            <x-mantine-title order="2" ta="center">Welcome back</x-mantine-title>
+            <x-mantine-text c="dimmed" size="sm" ta="center">
+                Don't have an account? 
+                <x-mantine-anchor href="{{ route('register') }}" wire:navigate>Sign up</x-mantine-anchor>
+            </x-mantine-text>
 
-    <form wire:submit="login">
-        <!-- Email Address -->
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input wire:model="form.email" id="email" class="block mt-1 w-full" type="email" name="email" required autofocus autocomplete="username" />
-            <x-input-error :messages="$errors->get('form.email')" class="mt-2" />
-        </div>
-
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
-
-            <x-text-input wire:model="form.password" id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="current-password" />
-
-            <x-input-error :messages="$errors->get('form.password')" class="mt-2" />
-        </div>
-
-        <!-- Remember Me -->
-        <div class="block mt-4">
-            <label for="remember" class="inline-flex items-center">
-                <input wire:model="form.remember" id="remember" type="checkbox" class="rounded dark:bg-gray-900 border-gray-300 dark:border-gray-700 text-indigo-600 shadow-sm focus:ring-indigo-500 dark:focus:ring-indigo-600 dark:focus:ring-offset-gray-800" name="remember">
-                <span class="ms-2 text-sm text-gray-600 dark:text-gray-400">{{ __('Remember me') }}</span>
-            </label>
-        </div>
-
-        <div class="flex items-center justify-end mt-4">
-            @if (Route::has('password.request'))
-                <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800" href="{{ route('password.request') }}" wire:navigate>
-                    {{ __('Forgot your password?') }}
-                </a>
+            <!-- Session Status -->
+            @if (session('status'))
+                <x-mantine-alert color="blue" variant="light">
+                    {{ session('status') }}
+                </x-mantine-alert>
             @endif
 
-            <x-primary-button class="ms-3">
-                {{ __('Log in') }}
-            </x-primary-button>
-        </div>
-    </form>
+            <form wire:submit="login">
+                <!-- Email Address -->
+                <x-mantine-text-input
+                    wire:model="form.email"
+                    type="email"
+                    label="Email"
+                    placeholder="your@email.com"
+                    required
+                    :error="$errors->get('form.email')"
+                />
+
+                <!-- Password -->
+                <x-mantine-password-input
+                    wire:model="form.password"
+                    label="Password"
+                    placeholder="Your password"
+                    required
+                    mt="md"
+                    :error="$errors->get('form.password')"
+                />
+
+                <!-- Remember Me -->
+                <x-mantine-checkbox
+                    wire:model="form.remember"
+                    label="Remember me"
+                    mt="md"
+                />
+
+                <x-mantine-group justify="space-between" mt="md">
+                    @if (Route::has('password.request'))
+                        <x-mantine-anchor href="{{ route('password.request') }}" wire:navigate size="sm">
+                            Forgot password?
+                        </x-mantine-anchor>
+                    @endif
+
+                    <x-mantine-button type="submit">
+                        Log in
+                    </x-mantine-button>
+                </x-mantine-group>
+            </form>
+        </x-mantine-stack>
+    </x-mantine-paper>
 </div>

@@ -39,42 +39,58 @@ $updatePassword = function () {
 
 ?>
 
-<section>
-    <header>
-        <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-            {{ __('Update Password') }}
-        </h2>
-
-        <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
-            {{ __('Ensure your account is using a long, random password to stay secure.') }}
-        </p>
-    </header>
-
-    <form wire:submit="updatePassword" class="mt-6 space-y-6">
+<x-mantine-paper shadow="sm" p="lg" radius="md">
+    <x-mantine-stack>
+        <!-- Header -->
         <div>
-            <x-input-label for="update_password_current_password" :value="__('Current Password')" />
-            <x-text-input wire:model="current_password" id="update_password_current_password" name="current_password" type="password" class="mt-1 block w-full" autocomplete="current-password" />
-            <x-input-error :messages="$errors->get('current_password')" class="mt-2" />
+            <x-mantine-title order="3">
+                {{ __('Update Password') }}
+            </x-mantine-title>
+
+            <x-mantine-text size="sm" c="dimmed" mt="xs">
+                {{ __('Ensure your account is using a long, random password to stay secure.') }}
+            </x-mantine-text>
         </div>
 
-        <div>
-            <x-input-label for="update_password_password" :value="__('New Password')" />
-            <x-text-input wire:model="password" id="update_password_password" name="password" type="password" class="mt-1 block w-full" autocomplete="new-password" />
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
+        <form wire:submit="updatePassword">
+            <x-mantine-stack>
+                <!-- Current Password -->
+                <x-mantine-password-input
+                    wire:model="current_password"
+                    label="Current Password"
+                    required
+                    :error="$errors->get('current_password')"
+                />
 
-        <div>
-            <x-input-label for="update_password_password_confirmation" :value="__('Confirm Password')" />
-            <x-text-input wire:model="password_confirmation" id="update_password_password_confirmation" name="password_confirmation" type="password" class="mt-1 block w-full" autocomplete="new-password" />
-            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
-        </div>
+                <!-- New Password -->
+                <x-mantine-password-input
+                    wire:model="password"
+                    label="New Password"
+                    required
+                    :error="$errors->get('password')"
+                />
 
-        <div class="flex items-center gap-4">
-            <x-primary-button>{{ __('Save') }}</x-primary-button>
+                <!-- Confirm Password -->
+                <x-mantine-password-input
+                    wire:model="password_confirmation"
+                    label="Confirm Password"
+                    required
+                    :error="$errors->get('password_confirmation')"
+                />
 
-            <x-action-message class="me-3" on="password-updated">
-                {{ __('Saved.') }}
-            </x-action-message>
-        </div>
-    </form>
-</section>
+                <!-- Actions -->
+                <x-mantine-group justify="flex-end" mt="lg">
+                    @if (session('status') === 'password-updated')
+                        <x-mantine-text size="sm" c="dimmed">
+                            {{ __('Saved.') }}
+                        </x-mantine-text>
+                    @endif
+
+                    <x-mantine-button type="submit">
+                        {{ __('Save') }}
+                    </x-mantine-button>
+                </x-mantine-group>
+            </x-mantine-stack>
+        </form>
+    </x-mantine-stack>
+</x-mantine-paper>

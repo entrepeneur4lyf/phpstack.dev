@@ -48,54 +48,77 @@ $sendVerification = function () {
 
 ?>
 
-<section>
-    <header>
-        <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-            {{ __('Profile Information') }}
-        </h2>
-
-        <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
-            {{ __("Update your account's profile information and email address.") }}
-        </p>
-    </header>
-
-    <form wire:submit="updateProfileInformation" class="mt-6 space-y-6">
+<x-mantine-paper shadow="sm" p="lg" radius="md">
+    <x-mantine-stack>
+        <!-- Header -->
         <div>
-            <x-input-label for="name" :value="__('Name')" />
-            <x-text-input wire:model="name" id="name" name="name" type="text" class="mt-1 block w-full" required autofocus autocomplete="name" />
-            <x-input-error class="mt-2" :messages="$errors->get('name')" />
+            <x-mantine-title order="3">
+                {{ __('Profile Information') }}
+            </x-mantine-title>
+
+            <x-mantine-text size="sm" c="dimmed" mt="xs">
+                {{ __("Update your account's profile information and email address.") }}
+            </x-mantine-text>
         </div>
 
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input wire:model="email" id="email" name="email" type="email" class="mt-1 block w-full" required autocomplete="username" />
-            <x-input-error class="mt-2" :messages="$errors->get('email')" />
+        <form wire:submit="updateProfileInformation">
+            <x-mantine-stack>
+                <!-- Name -->
+                <x-mantine-text-input
+                    wire:model="name"
+                    label="Name"
+                    placeholder="Your name"
+                    required
+                    :error="$errors->get('name')"
+                />
 
-            @if (auth()->user() instanceof MustVerifyEmail && ! auth()->user()->hasVerifiedEmail())
+                <!-- Email -->
                 <div>
-                    <p class="text-sm mt-2 text-gray-800 dark:text-gray-200">
-                        {{ __('Your email address is unverified.') }}
+                    <x-mantine-text-input
+                        wire:model="email"
+                        type="email"
+                        label="Email"
+                        placeholder="your@email.com"
+                        required
+                        :error="$errors->get('email')"
+                    />
 
-                        <button wire:click.prevent="sendVerification" class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800">
-                            {{ __('Click here to re-send the verification email.') }}
-                        </button>
-                    </p>
+                    @if (auth()->user() instanceof MustVerifyEmail && ! auth()->user()->hasVerifiedEmail())
+                        <x-mantine-alert color="yellow" variant="light" mt="sm">
+                            <x-mantine-group justify="space-between" align="center">
+                                {{ __('Your email address is unverified.') }}
 
-                    @if (session('status') === 'verification-link-sent')
-                        <p class="mt-2 font-medium text-sm text-green-600 dark:text-green-400">
-                            {{ __('A new verification link has been sent to your email address.') }}
-                        </p>
+                                <x-mantine-button 
+                                    wire:click.prevent="sendVerification"
+                                    variant="light"
+                                    size="xs"
+                                >
+                                    {{ __('Resend verification email') }}
+                                </x-mantine-button>
+                            </x-mantine-group>
+                        </x-mantine-alert>
+
+                        @if (session('status') === 'verification-link-sent')
+                            <x-mantine-alert color="green" variant="light" mt="sm">
+                                {{ __('A new verification link has been sent to your email address.') }}
+                            </x-mantine-alert>
+                        @endif
                     @endif
                 </div>
-            @endif
-        </div>
 
-        <div class="flex items-center gap-4">
-            <x-primary-button>{{ __('Save') }}</x-primary-button>
+                <!-- Actions -->
+                <x-mantine-group justify="flex-end" mt="lg">
+                    @if (session('status') === 'profile-updated')
+                        <x-mantine-text size="sm" c="dimmed">
+                            {{ __('Saved.') }}
+                        </x-mantine-text>
+                    @endif
 
-            <x-action-message class="me-3" on="profile-updated">
-                {{ __('Saved.') }}
-            </x-action-message>
-        </div>
-    </form>
-</section>
+                    <x-mantine-button type="submit">
+                        {{ __('Save') }}
+                    </x-mantine-button>
+                </x-mantine-group>
+            </x-mantine-stack>
+        </form>
+    </x-mantine-stack>
+</x-mantine-paper>

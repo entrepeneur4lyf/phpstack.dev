@@ -37,25 +37,42 @@ $sendPasswordResetLink = function () {
 ?>
 
 <div>
-    <div class="mb-4 text-sm text-gray-600 dark:text-gray-400">
-        {{ __('Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.') }}
-    </div>
+    <x-mantine-paper shadow="md" p="xl" radius="md" mx="auto" maw="400">
+        <x-mantine-stack>
+            <!-- Header -->
+            <x-mantine-title order="2" ta="center">Forgot password</x-mantine-title>
+            <x-mantine-text c="dimmed" size="sm">
+                Enter your email to get a reset link
+            </x-mantine-text>
 
-    <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
+            <!-- Session Status -->
+            @if (session('status'))
+                <x-mantine-alert color="blue" variant="light">
+                    {{ session('status') }}
+                </x-mantine-alert>
+            @endif
 
-    <form wire:submit="sendPasswordResetLink">
-        <!-- Email Address -->
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input wire:model="email" id="email" class="block mt-1 w-full" type="email" name="email" required autofocus />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
+            <form wire:submit="sendPasswordResetLink">
+                <!-- Email Address -->
+                <x-mantine-text-input
+                    wire:model="email"
+                    type="email"
+                    label="Email"
+                    placeholder="your@email.com"
+                    required
+                    :error="$errors->get('email')"
+                />
 
-        <div class="flex items-center justify-end mt-4">
-            <x-primary-button>
-                {{ __('Email Password Reset Link') }}
-            </x-primary-button>
-        </div>
-    </form>
+                <x-mantine-group position="apart" mt="lg">
+                    <x-mantine-anchor href="{{ route('login') }}" wire:navigate size="sm">
+                        Back to login
+                    </x-mantine-anchor>
+
+                    <x-mantine-button type="submit">
+                        Send reset link
+                    </x-mantine-button>
+                </x-mantine-group>
+            </form>
+        </x-mantine-stack>
+    </x-mantine-paper>
 </div>

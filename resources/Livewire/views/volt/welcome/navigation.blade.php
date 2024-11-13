@@ -1,26 +1,31 @@
-<nav class="-mx-3 flex flex-1 justify-end">
+<x-mantine-group justify="flex-end">
     @auth
-        <a
+        <x-mantine-button
+            component="a"
             href="{{ url('/dashboard') }}"
-            class="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
+            wire:navigate
+            variant="subtle"
         >
             Dashboard
-        </a>
+        </x-mantine-button>
     @else
-        <a
+        <x-mantine-button
+            component="a"
             href="{{ route('login') }}"
-            class="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
+            wire:navigate
+            variant="subtle"
         >
             Log in
-        </a>
+        </x-mantine-button>
 
         @if (Route::has('register'))
-            <a
+            <x-mantine-button
+                component="a"
                 href="{{ route('register') }}"
-                class="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
+                wire:navigate
             >
                 Register
-            </a>
+            </x-mantine-button>
         @endif
     @endauth
-</nav>
+</x-mantine-group>

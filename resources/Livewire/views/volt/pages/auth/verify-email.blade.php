@@ -29,23 +29,35 @@ $logout = function (Logout $logout) {
 ?>
 
 <div>
-    <div class="mb-4 text-sm text-gray-600 dark:text-gray-400">
-        {{ __('Thanks for signing up! Before getting started, could you verify your email address by clicking on the link we just emailed to you? If you didn\'t receive the email, we will gladly send you another.') }}
-    </div>
+    <x-mantine-paper shadow="md" p="xl" radius="md" mx="auto" maw="500">
+        <x-mantine-stack>
+            <!-- Header -->
+            <x-mantine-title order="2" ta="center">Verify your email</x-mantine-title>
 
-    @if (session('status') == 'verification-link-sent')
-        <div class="mb-4 font-medium text-sm text-green-600 dark:text-green-400">
-            {{ __('A new verification link has been sent to the email address you provided during registration.') }}
-        </div>
-    @endif
+            <!-- Main Message -->
+            <x-mantine-text size="sm">
+                Thanks for signing up! Before getting started, could you verify your email address by clicking on the
+                link we just emailed to you? If you didn't receive the email, we will gladly send you another.
+            </x-mantine-text>
 
-    <div class="mt-4 flex items-center justify-between">
-        <x-primary-button wire:click="sendVerification">
-            {{ __('Resend Verification Email') }}
-        </x-primary-button>
+            <!-- Verification Status -->
+            @if (session('status') == 'verification-link-sent')
+                <x-mantine-alert color="green" variant="light">
+                    A new verification link has been sent to the email address you provided during registration.
+                </x-mantine-alert>
+            @endif
 
-        <button wire:click="logout" type="submit" class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800">
-            {{ __('Log Out') }}
-        </button>
-    </div>
+            <x-mantine-group position="apart" mt="lg">
+                <!-- Resend Button -->
+                <x-mantine-button wire:click="sendVerification">
+                    Resend Verification Email
+                </x-mantine-button>
+
+                <!-- Logout Button -->
+                <x-mantine-button wire:click="logout" variant="subtle" color="gray">
+                    Log Out
+                </x-mantine-button>
+            </x-mantine-group>
+        </x-mantine-stack>
+    </x-mantine-paper>
 </div>

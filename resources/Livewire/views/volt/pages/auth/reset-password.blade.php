@@ -62,36 +62,51 @@ $resetPassword = function () {
 ?>
 
 <div>
-    <form wire:submit="resetPassword">
-        <!-- Email Address -->
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input wire:model="email" id="email" class="block mt-1 w-full" type="email" name="email" required autofocus autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
+    <x-mantine-paper shadow="md" p="xl" radius="md" mx="auto" maw="400">
+        <x-mantine-stack>
+            <!-- Header -->
+            <x-mantine-title order="2" ta="center">Reset password</x-mantine-title>
+            <x-mantine-text c="dimmed" size="sm">
+                Enter your new password
+            </x-mantine-text>
 
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
-            <x-text-input wire:model="password" id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="new-password" />
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
+            <form wire:submit="resetPassword">
+                <!-- Email Address -->
+                <x-mantine-text-input
+                    wire:model="email"
+                    type="email"
+                    label="Email"
+                    placeholder="your@email.com"
+                    required
+                    :error="$errors->get('email')"
+                />
 
-        <!-- Confirm Password -->
-        <div class="mt-4">
-            <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
+                <!-- Password -->
+                <x-mantine-password-input
+                    wire:model="password"
+                    label="New Password"
+                    placeholder="Your new password"
+                    required
+                    mt="md"
+                    :error="$errors->get('password')"
+                />
 
-            <x-text-input wire:model="password_confirmation" id="password_confirmation" class="block mt-1 w-full"
-                          type="password"
-                          name="password_confirmation" required autocomplete="new-password" />
+                <!-- Confirm Password -->
+                <x-mantine-password-input
+                    wire:model="password_confirmation"
+                    label="Confirm Password"
+                    placeholder="Confirm your new password"
+                    required
+                    mt="md"
+                    :error="$errors->get('password_confirmation')"
+                />
 
-            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
-        </div>
-
-        <div class="flex items-center justify-end mt-4">
-            <x-primary-button>
-                {{ __('Reset Password') }}
-            </x-primary-button>
-        </div>
-    </form>
+                <x-mantine-group justify="flex-end" mt="xl">
+                    <x-mantine-button type="submit">
+                        Reset password
+                    </x-mantine-button>
+                </x-mantine-group>
+            </form>
+        </x-mantine-stack>
+    </x-mantine-paper>
 </div>

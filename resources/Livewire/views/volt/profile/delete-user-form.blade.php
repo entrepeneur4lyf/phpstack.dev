@@ -6,7 +6,10 @@ use Illuminate\Support\Facades\Auth;
 use function Livewire\Volt\rules;
 use function Livewire\Volt\state;
 
-state(['password' => '']);
+state([
+    'password' => '',
+    'confirmModalOpened' => false
+]);
 
 rules(['password' => ['required', 'string', 'current_password']]);
 
@@ -18,59 +21,75 @@ $deleteUser = function (Logout $logout) {
     $this->redirect('/', navigate: true);
 };
 
+$openConfirmModal = fn () => $this->confirmModalOpened = true;
+$closeConfirmModal = fn () => $this->confirmModalOpened = false;
+
 ?>
 
-<section class="space-y-6">
-    <header>
-        <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-            {{ __('Delete Account') }}
-        </h2>
+<x-mantine-paper shadow="sm" p="lg" radius="md">
+    <x-mantine-stack>
+        <!-- Header -->
+        <div>
+            <x-mantine-title order="3" c="red">
+                {{ __('Delete Account') }}
+            </x-mantine-title>
 
-        <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
-            {{ __('Once your account is deleted, all of its resources and data will be permanently deleted. Before deleting your account, please download any data or information that you wish to retain.') }}
-        </p>
-    </header>
+            <x-mantine-text size="sm" c="dimmed" mt="xs">
+                {{ __('Once your account is deleted, all of its resources and data will be permanently deleted. Before deleting your account, please download any data or information that you wish to retain.') }}
+            </x-mantine-text>
+        </div>
 
-    <x-danger-button
-        x-data=""
-        x-on:click.prevent="$dispatch('open-modal', 'confirm-user-deletion')"
-    >{{ __('Delete Account') }}</x-danger-button>
+        <!-- Delete Button -->
+        <div>
+            <x-mantine-button 
+                color="red" 
+                variant="light"
+                wire:click="openConfirmModal"
+            >
+                {{ __('Delete Account') }}
+            </x-mantine-button>
+        </div>
 
-    <x-modal name="confirm-user-deletion" :show="$errors->isNotEmpty()" focusable>
-        <form wire:submit="deleteUser" class="p-6">
+        <!-- Confirmation Modal -->
+        <x-mantine-modal
+            title="Delete Account"
+            :opened="$confirmModalOpened"
+            wire:model="confirmModalOpened"
+            size="lg"
+        >
+            <form wire:submit="deleteUser">
+                <x-mantine-stack>
+                    <!-- Warning Message -->
+                    <x-mantine-text size="sm">
+                        {{ __('Once your account is deleted, all of its resources and data will be permanently deleted. Please enter your password to confirm you would like to permanently delete your account.') }}
+                    </x-mantine-text>
 
-            <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-                {{ __('Are you sure you want to delete your account?') }}
-            </h2>
+                    <!-- Password Confirmation -->
+                    <x-mantine-password-input
+                        wire:model="password"
+                        label="Password"
+                        required
+                        :error="$errors->get('password')"
+                    />
 
-            <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                {{ __('Once your account is deleted, all of its resources and data will be permanently deleted. Please enter your password to confirm you would like to permanently delete your account.') }}
-            </p>
+                    <!-- Actions -->
+                    <x-mantine-group justify="flex-end" mt="lg">
+                        <x-mantine-button 
+                            variant="subtle" 
+                            wire:click="closeConfirmModal"
+                        >
+                            {{ __('Cancel') }}
+                        </x-mantine-button>
 
-            <div class="mt-6">
-                <x-input-label for="password" value="{{ __('Password') }}" class="sr-only" />
-
-                <x-text-input
-                    wire:model="password"
-                    id="password"
-                    name="password"
-                    type="password"
-                    class="mt-1 block w-3/4"
-                    placeholder="{{ __('Password') }}"
-                />
-
-                <x-input-error :messages="$errors->get('password')" class="mt-2" />
-            </div>
-
-            <div class="mt-6 flex justify-end">
-                <x-secondary-button x-on:click="$dispatch('close')">
-                    {{ __('Cancel') }}
-                </x-secondary-button>
-
-                <x-danger-button class="ms-3">
-                    {{ __('Delete Account') }}
-                </x-danger-button>
-            </div>
-        </form>
-    </x-modal>
-</section>
+                        <x-mantine-button 
+                            type="submit"
+                            color="red"
+                        >
+                            {{ __('Delete Account') }}
+                        </x-mantine-button>
+                    </x-mantine-group>
+                </x-mantine-stack>
+            </form>
+        </x-mantine-modal>
+    </x-mantine-stack>
+</x-mantine-paper>

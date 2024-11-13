@@ -61,8 +61,10 @@
             </x-slot>
 
             <!-- Main Content -->
-            <x-mantine-container size="xl" py="xl">
-                {{ $slot }}
+            <x-mantine-container size="sm" py="xl">
+                <x-mantine-paper shadow="md" p="xl" radius="md">
+                    {{ $slot }}
+                </x-mantine-paper>
             </x-mantine-container>
 
             <!-- Footer -->
