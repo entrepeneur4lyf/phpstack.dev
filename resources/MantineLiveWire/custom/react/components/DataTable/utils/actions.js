@@ -1,4 +1,5 @@
 import { ActionIcon, Group, Tooltip } from '@mantine/core';
+import { motion } from 'motion/react';
 import { 
     IconEye, 
     IconEdit, 
@@ -11,6 +12,9 @@ import {
     IconPrinter,
     IconShare
 } from '@tabler/icons-react';
+
+// Motion-enhanced ActionIcon
+const MotionActionIcon = motion(ActionIcon);
 
 // Map of icon names to components
 const iconMap = {
@@ -83,7 +87,7 @@ export const createActionButton = (
     const Icon = iconMap[actionConfig.icon] || IconDotsVertical;
 
     const button = (
-        <ActionIcon
+        <MotionActionIcon
             {...buttonProps}
             onClick={(e) => {
                 // Stop event propagation to prevent row click
@@ -97,9 +101,20 @@ export const createActionButton = (
                 ...(disabled ? config.style?.disabled : {}),
                 ...(loading ? config.style?.loading : {}),
             }}
+            // Motion animations
+            layout
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.95 }}
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.8 }}
+            transition={{
+                layout: { duration: 0.2 },
+                scale: { type: "spring", stiffness: 300, damping: 20 }
+            }}
         >
             <Icon size={16} />
-        </ActionIcon>
+        </MotionActionIcon>
     );
 
     // Add tooltip if enabled
@@ -134,14 +149,22 @@ export const createActionCell = (
     return (
         <Group {...groupProps}>
             {allowedActions.map(action => (
-                createActionButton(
-                    action,
-                    record,
-                    config,
-                    handlers.onClick,
-                    state.disabled[action],
-                    state.loading[action]
-                )
+                <motion.div
+                    key={action}
+                    layout
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: 20 }}
+                >
+                    {createActionButton(
+                        action,
+                        record,
+                        config,
+                        handlers.onClick,
+                        state.disabled[action],
+                        state.loading[action]
+                    )}
+                </motion.div>
             ))}
         </Group>
     );
