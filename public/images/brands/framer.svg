@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 84 84" fill="none">
+  <path fill="#0055FF" d="M21 0h42v84H21V0z"/>
+  <path fill="#00AAFF" d="M21 0h42v42H21V0z"/>
+  <path fill="#88DDFF" d="M21 0h21v21H21V0z">
+    <animate 
+      attributeName="fill"
+      values="#88DDFF;#00AAFF;#88DDFF"
+      dur="3s"
+      repeatCount="indefinite"
+    />
+  </path>
+</svg>

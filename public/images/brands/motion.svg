@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 84 84" fill="none">
+  <!-- Motion Path -->
+  <path id="motionPath" d="M21 42C21 21 63 21 63 42C63 63 21 63 21 42" stroke="none" fill="none"/>
+  
+  <!-- Animated Circle -->
+  <circle r="6" fill="#FF0066">
+    <animateMotion
+      dur="2s"
+      repeatCount="indefinite"
+      path="M21 42C21 21 63 21 63 42C63 63 21 63 21 42"
+    />
+    <animate
+      attributeName="r"
+      values="6;8;6"
+      dur="1s"
+      repeatCount="indefinite"
+    />
+  </circle>
+  
+  <!-- Trail Effect -->
+  <circle r="4" fill="#FF0066" opacity="0.6">
+    <animateMotion
+      dur="2s"
+      repeatCount="indefinite"
+      path="M21 42C21 21 63 21 63 42C63 63 21 63 21 42"
+      begin="0.1s"
+    />
+  </circle>
+  
+  <circle r="3" fill="#FF0066" opacity="0.4">
+    <animateMotion
+      dur="2s"
+      repeatCount="indefinite"
+      path="M21 42C21 21 63 21 63 42C63 63 21 63 21 42"
+      begin="0.2s"
+    />
+  </circle>
+  
+  <!-- Text -->
+  <text x="42" y="42" text-anchor="middle" dominant-baseline="middle" 
+        font-family="system-ui" font-weight="bold" font-size="14" fill="#FF0066">
+    Motion
+    <animate
+      attributeName="opacity"
+      values="0.5;1;0.5"
+      dur="2s"
+      repeatCount="indefinite"
+    />
+  </text>
+</svg>

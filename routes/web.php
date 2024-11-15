@@ -1,8 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Livewire\Pages\Home;
 
-Route::view('/', 'welcome');
+// Replace default welcome with our Home component
+Route::get('/', Home::class)->name('home');
 
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])

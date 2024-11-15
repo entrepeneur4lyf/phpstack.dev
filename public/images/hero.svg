@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" fill="none">
+  <!-- Background Grid -->
+  <path stroke="#E5E7EB" stroke-width="1" opacity="0.2" d="M0 50h800 M0 150h800 M0 250h800 M0 350h800 M0 450h800 M0 550h800"/>
+  <path stroke="#E5E7EB" stroke-width="1" opacity="0.2" d="M50 0v600 M150 0v600 M250 0v600 M350 0v600 M450 0v600 M550 0v600 M650 0v600 M750 0v600"/>
+  
+  <!-- Connected Hexagons representing the stack -->
+  <g transform="translate(200,150)">
+    <!-- Laravel Hexagon -->
+    <path fill="#FF2D20" opacity="0.1" d="M100 0l86.6 50v100l-86.6 50L13.4 150V50z"/>
+    <path stroke="#FF2D20" stroke-width="2" d="M100 0l86.6 50v100l-86.6 50L13.4 150V50z"/>
+    
+    <!-- Livewire Hexagon -->
+    <path fill="#FB70A9" opacity="0.1" d="M300 100l86.6 50v100l-86.6 50L213.4 250V150z"/>
+    <path stroke="#FB70A9" stroke-width="2" d="M300 100l86.6 50v100l-86.6 50L213.4 250V150z"/>
+    
+    <!-- Mantine Hexagon -->
+    <path fill="#339AF0" opacity="0.1" d="M200 200l86.6 50v100l-86.6 50L113.4 350V250z"/>
+    <path stroke="#339AF0" stroke-width="2" d="M200 200l86.6 50v100l-86.6 50L113.4 350V250z"/>
+    
+    <!-- Connecting Lines -->
+    <path stroke="#E5E7EB" stroke-width="2" stroke-dasharray="4 4" d="M186.6 50L213.4 150"/>
+    <path stroke="#E5E7EB" stroke-width="2" stroke-dasharray="4 4" d="M386.6 150L286.6 250"/>
+    
+    <!-- Animated Dots -->
+    <circle fill="#FF2D20" r="4">
+      <animateMotion dur="3s" repeatCount="indefinite" path="M186.6 50L213.4 150"/>
+    </circle>
+    <circle fill="#FB70A9" r="4">
+      <animateMotion dur="3s" repeatCount="indefinite" path="M386.6 150L286.6 250"/>
+    </circle>
+  </g>
+  
+  <!-- Decorative Elements -->
+  <circle cx="50" cy="50" r="2" fill="#339AF0"/>
+  <circle cx="750" cy="550" r="2" fill="#FF2D20"/>
+  <circle cx="150" cy="450" r="2" fill="#FB70A9"/>
+  <circle cx="650" cy="150" r="2" fill="#339AF0"/>
+  
+  <!-- Code-like Background Elements -->
+  <g opacity="0.1" fill="#4B5563" font-family="monospace" font-size="12">
+    <text x="50" y="100">&lt;?php</text>
+    <text x="50" y="120">class App extends</text>
+    <text x="650" y="300">import { motion }</text>
+    <text x="650" y="320">from 'motion/react';</text>
+    <text x="100" y="500">&lt;x-mantine-component</text>
+    <text x="100" y="520">:prop="value" /&gt;</text>
+  </g>
+</svg>

@@ -16,6 +16,14 @@ export default defineConfig({
         react(),
         mantinePlugin(),
     ],
+    css: {
+        postcss: {
+            plugins: [
+                require('tailwindcss'),
+                require('autoprefixer'),
+            ],
+        },
+    },
     resolve: {
         alias: {
             '@': '/resources/js',
