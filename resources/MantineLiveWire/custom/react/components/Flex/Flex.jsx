@@ -1,10 +1,71 @@
 import React from 'react';
 import { Flex as MantineFlex } from '@mantine/core';
 import { motion, AnimatePresence, useScroll, useTransform } from 'motion/react';
-import { springs, layout, stagger, scroll } from '../../utils/animations';
+import { springs, layout, stagger, scroll, presets } from '../../utils/animations';
 
 // Motion-enhanced flex
 const MotionFlex = motion(MantineFlex);
+
+// Shared animation configurations
+const flexItemAnimation = {
+    layout: true,
+    initial: { opacity: 0, scale: 0.9 },
+    animate: { opacity: 1, scale: 1 },
+    exit: { opacity: 0, scale: 0.9 },
+    transition: {
+        ...springs.expand,
+        opacity: {
+            duration: presets.expand.duration,
+            ease: presets.expand.ease
+        }
+    }
+};
+
+// Direction-aware animations with consistent timing
+const getDirectionalAnimation = (direction, index) => {
+    const baseDelay = index * presets.expand.duration * 0.25;
+    const transition = {
+        ...springs.expand,
+        delay: baseDelay,
+        opacity: {
+            duration: presets.expand.duration,
+            ease: presets.expand.ease
+        }
+    };
+
+    switch (direction) {
+        case 'row':
+            return {
+                hidden: { opacity: 0, x: 20, scale: 0.9 },
+                visible: { opacity: 1, x: 0, scale: 1 },
+                exit: { opacity: 0, x: -20, scale: 0.9 },
+                transition
+            };
+        case 'row-reverse':
+            return {
+                hidden: { opacity: 0, x: -20, scale: 0.9 },
+                visible: { opacity: 1, x: 0, scale: 1 },
+                exit: { opacity: 0, x: 20, scale: 0.9 },
+                transition
+            };
+        case 'column':
+            return {
+                hidden: { opacity: 0, y: 20, scale: 0.9 },
+                visible: { opacity: 1, y: 0, scale: 1 },
+                exit: { opacity: 0, y: -20, scale: 0.9 },
+                transition
+            };
+        case 'column-reverse':
+            return {
+                hidden: { opacity: 0, y: -20, scale: 0.9 },
+                visible: { opacity: 1, y: 0, scale: 1 },
+                exit: { opacity: 0, y: 20, scale: 0.9 },
+                transition
+            };
+        default:
+            return flexItemAnimation;
+    }
+};
 
 function Flex({ wire, mingleData, children }) {
     const {
@@ -20,97 +81,34 @@ function Flex({ wire, mingleData, children }) {
 
     const flexRef = React.useRef(null);
 
-    // Scroll-linked animations
+    // Scroll-linked animations with consistent timing
     const { scrollYProgress } = useScroll({
         target: flexRef,
         offset: ["start end", "end start"]
     });
 
-    // Base animation props
+    // Base animation props with expand preset
     const motionProps = animate ? {
         ...layout.default,
         initial: { opacity: 0 },
         animate: { opacity: 1 },
         exit: { opacity: 0 },
-        transition: springs.default,
+        transition: {
+            ...springs.expand,
+            opacity: {
+                duration: presets.expand.duration,
+                ease: presets.expand.ease
+            }
+        }
     } : {};
 
     // Add scroll animation props if enabled
     const scrollProps = scrollAnimation ? {
-        style: scroll.scaleAndFade(scrollYProgress),
-    } : {};
-
-    // Direction-aware animations
-    const getDirectionalAnimation = (index) => {
-        const baseDelay = index * 0.05;
-        switch (direction) {
-            case 'row':
-                return {
-                    hidden: { opacity: 0, x: 20 },
-                    visible: { 
-                        opacity: 1,
-                        x: 0,
-                        transition: {
-                            ...springs.default,
-                            delay: baseDelay,
-                        },
-                    },
-                    exit: { opacity: 0, x: -20 },
-                };
-            case 'row-reverse':
-                return {
-                    hidden: { opacity: 0, x: -20 },
-                    visible: { 
-                        opacity: 1,
-                        x: 0,
-                        transition: {
-                            ...springs.default,
-                            delay: baseDelay,
-                        },
-                    },
-                    exit: { opacity: 0, x: 20 },
-                };
-            case 'column':
-                return {
-                    hidden: { opacity: 0, y: 20 },
-                    visible: { 
-                        opacity: 1,
-                        y: 0,
-                        transition: {
-                            ...springs.default,
-                            delay: baseDelay,
-                        },
-                    },
-                    exit: { opacity: 0, y: -20 },
-                };
-            case 'column-reverse':
-                return {
-                    hidden: { opacity: 0, y: -20 },
-                    visible: { 
-                        opacity: 1,
-                        y: 0,
-                        transition: {
-                            ...springs.default,
-                            delay: baseDelay,
-                        },
-                    },
-                    exit: { opacity: 0, y: 20 },
-                };
-            default:
-                return {
-                    hidden: { opacity: 0, scale: 0.9 },
-                    visible: { 
-                        opacity: 1,
-                        scale: 1,
-                        transition: {
-                            ...springs.default,
-                            delay: baseDelay,
-                        },
-                    },
-                    exit: { opacity: 0, scale: 0.9 },
-                };
+        style: {
+            ...scroll.scaleAndFade(scrollYProgress),
+            transition: `all ${presets.expand.duration}s ${presets.expand.ease}`
         }
-    };
+    } : {};
 
     return (
         <MotionFlex
@@ -139,11 +137,7 @@ function Flex({ wire, mingleData, children }) {
                     {React.Children.map(children, (child, index) => (
                         <motion.div
                             key={index}
-                            layout
-                            variants={getDirectionalAnimation(index)}
-                            initial="hidden"
-                            animate="visible"
-                            exit="exit"
+                            {...getDirectionalAnimation(direction, index)}
                             style={{
                                 display: 'flex',
                                 alignItems: 'center',
@@ -162,11 +156,7 @@ function Flex({ wire, mingleData, children }) {
 Flex.Item = function FlexItem({ children, ...props }) {
     return (
         <motion.div
-            layout
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.9 }}
-            transition={springs.default}
+            {...flexItemAnimation}
             style={{
                 display: 'flex',
                 alignItems: 'center',

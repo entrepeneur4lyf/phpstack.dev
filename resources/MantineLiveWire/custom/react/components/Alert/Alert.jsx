@@ -1,7 +1,7 @@
 import React from 'react';
 import { Alert as MantineAlert } from '@mantine/core';
 import { motion, AnimatePresence } from 'motion/react';
-import { springs, interactive, layout } from '../../utils/animations';
+import { springs, interactive, layout, presets } from '../../utils/animations';
 
 // Motion-enhanced alert
 const MotionAlert = motion(MantineAlert);
@@ -30,8 +30,8 @@ function Alert({ wire, mingleData, children }) {
             transition: {
                 repeat: Infinity,
                 repeatType: "reverse",
-                duration: 2,
-                ease: "easeInOut",
+                duration: presets.feedback.duration * 10, // Slower pulse
+                ease: presets.feedback.ease,
             },
         },
     } : {};
@@ -45,7 +45,7 @@ function Alert({ wire, mingleData, children }) {
                         <motion.div
                             initial={{ rotate: -45, scale: 0.5, opacity: 0 }}
                             animate={{ rotate: 0, scale: 1, opacity: 1 }}
-                            transition={springs.snappy}
+                            transition={springs.feedback}
                         >
                             {icon}
                         </motion.div>
@@ -74,11 +74,14 @@ function Alert({ wire, mingleData, children }) {
                     opacity: 0,
                     y: 20,
                     scale: 0.95,
-                    transition: {
-                        duration: 0.2,
-                    },
                 }}
-                transition={springs.default}
+                transition={{
+                    ...springs.feedback,
+                    opacity: {
+                        duration: presets.feedback.duration,
+                        ease: presets.feedback.ease
+                    }
+                }}
                 {...pulseAnimation}
                 layout
             >
@@ -86,6 +89,7 @@ function Alert({ wire, mingleData, children }) {
                     <motion.div
                         style={{ position: 'absolute', top: 8, right: 8 }}
                         {...interactive.button}
+                        transition={springs.input} // Use input preset for button
                     >
                         <MantineAlert.CloseButton
                             onClick={onClose ? () => wire.emit('close') : undefined}
@@ -97,8 +101,12 @@ function Alert({ wire, mingleData, children }) {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
                     transition={{ 
-                        ...springs.default,
-                        delay: 0.1,
+                        ...springs.feedback,
+                        delay: presets.feedback.duration * 0.5,
+                        opacity: {
+                            duration: presets.feedback.duration,
+                            ease: presets.feedback.ease
+                        }
                     }}
                 >
                     {title && (
@@ -107,8 +115,12 @@ function Alert({ wire, mingleData, children }) {
                             initial={{ opacity: 0, x: -20 }}
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ 
-                                ...springs.default,
-                                delay: 0.15,
+                                ...springs.feedback,
+                                delay: presets.feedback.duration * 0.75,
+                                opacity: {
+                                    duration: presets.feedback.duration,
+                                    ease: presets.feedback.ease
+                                }
                             }}
                         >
                             <MantineAlert.Title>{title}</MantineAlert.Title>
@@ -119,8 +131,9 @@ function Alert({ wire, mingleData, children }) {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ 
-                            duration: 0.2,
-                            delay: 0.2,
+                            duration: presets.feedback.duration,
+                            delay: presets.feedback.duration,
+                            ease: presets.feedback.ease
                         }}
                     >
                         {children}

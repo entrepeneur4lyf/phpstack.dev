@@ -1,7 +1,7 @@
 import React from 'react';
 import { Accordion as MantineAccordion } from '@mantine/core';
 import { motion, AnimatePresence } from 'motion/react';
-import { springs, interactive, layout } from '../../utils/animations';
+import { springs, interactive, layout, presets } from '../../utils/animations';
 
 // Motion-enhanced components
 const MotionItem = motion(MantineAccordion.Item);
@@ -42,7 +42,7 @@ function Accordion({ wire, mingleData, children }) {
                     <MotionChevron
                         initial={false}
                         animate={{ rotate: value ? 180 : 0 }}
-                        transition={springs.snappy}
+                        transition={springs.input} // Use input preset for smooth rotation
                     >
                         {chevron}
                     </MotionChevron>
@@ -56,7 +56,7 @@ function Accordion({ wire, mingleData, children }) {
                 ...styles,
                 content: {
                     ...styles?.content,
-                    transition: 'none', // Remove Mantine's transitions
+                    transition: 'none',
                 },
             }}
         >
@@ -72,6 +72,7 @@ Accordion.Item = function AccordionItem({ wire, mingleData, children }) {
         <MotionItem
             value={value}
             {...layout.default}
+            transition={springs.expand} // Use expand preset for layout changes
         >
             {children}
         </MotionItem>
@@ -86,7 +87,8 @@ Accordion.Control = function AccordionControl({ wire, mingleData, children }) {
             icon={icon}
             disabled={disabled}
             {...(disabled ? {} : interactive.button)}
-            whileHover={disabled ? {} : { x: 4 }} // Additional indent on hover
+            whileHover={disabled ? {} : { x: 4 }}
+            transition={springs.input} // Use input preset for interactions
         >
             {children}
         </MotionControl>
@@ -103,16 +105,23 @@ Accordion.Panel = function AccordionPanel({ wire, mingleData, children }) {
                     height: 'auto',
                     opacity: 1,
                     transition: {
-                        height: springs.default,
-                        opacity: { duration: 0.2, delay: 0.1 },
+                        height: springs.expand,
+                        opacity: { 
+                            duration: presets.expand.duration,
+                            delay: 0.1,
+                            ease: presets.expand.ease
+                        },
                     }
                 }}
                 exit={{ 
                     height: 0,
                     opacity: 0,
                     transition: {
-                        height: springs.default,
-                        opacity: { duration: 0.1 },
+                        height: springs.expand,
+                        opacity: { 
+                            duration: presets.expand.duration * 0.5,
+                            ease: presets.expand.ease
+                        },
                     }
                 }}
                 style={{ overflow: 'hidden' }}
@@ -121,7 +130,14 @@ Accordion.Panel = function AccordionPanel({ wire, mingleData, children }) {
                     initial={{ y: 10, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
                     exit={{ y: -10, opacity: 0 }}
-                    transition={{ ...springs.default, delay: 0.1 }}
+                    transition={{ 
+                        ...springs.expand,
+                        delay: 0.1,
+                        opacity: {
+                            duration: presets.expand.duration,
+                            ease: presets.expand.ease
+                        }
+                    }}
                 >
                     {children}
                 </motion.div>

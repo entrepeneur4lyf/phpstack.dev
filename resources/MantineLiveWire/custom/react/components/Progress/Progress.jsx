@@ -1,7 +1,7 @@
 import React from 'react';
 import { Progress as MantineProgress } from '@mantine/core';
 import { motion, AnimatePresence } from 'motion/react';
-import { springs, layout } from '../../utils/animations';
+import { springs, layout, presets } from '../../utils/animations';
 
 // Motion-enhanced components
 const MotionRoot = motion(MantineProgress.Root);
@@ -22,12 +22,12 @@ function Progress({ wire, mingleData, children }) {
         styles,
     } = mingleData;
 
-    // Loading animation for striped variant
+    // Loading animation for striped variant with feedback timing
     const stripeAnimation = striped && animated ? {
         animate: {
             backgroundPosition: ['0% 0%', '100% 0%'],
             transition: {
-                duration: 2,
+                duration: presets.feedback.duration * 10, // Slower for continuous motion
                 ease: "linear",
                 repeat: Infinity,
             },
@@ -60,7 +60,7 @@ function Progress({ wire, mingleData, children }) {
             <motion.div
                 initial={{ width: 0 }}
                 animate={{ width: `${value}%` }}
-                transition={springs.default}
+                transition={springs.feedback}
                 {...stripeAnimation}
             >
                 {children}
@@ -92,6 +92,7 @@ Progress.Root = function ProgressRoot({ wire, mingleData, children }) {
                 },
             }}
             {...layout.default}
+            transition={springs.feedback}
         >
             {children}
         </MotionRoot>
@@ -107,12 +108,12 @@ Progress.Section = function ProgressSection({ wire, mingleData, children }) {
         'aria-label': ariaLabel,
     } = mingleData;
 
-    // Loading animation for striped variant
+    // Loading animation for striped variant with feedback timing
     const stripeAnimation = striped && animated ? {
         animate: {
             backgroundPosition: ['0% 0%', '100% 0%'],
             transition: {
-                duration: 2,
+                duration: presets.feedback.duration * 10,
                 ease: "linear",
                 repeat: Infinity,
             },
@@ -133,8 +134,11 @@ Progress.Section = function ProgressSection({ wire, mingleData, children }) {
             }}
             exit={{ width: 0, opacity: 0 }}
             transition={{
-                ...springs.default,
-                opacity: { duration: 0.2 },
+                ...springs.feedback,
+                opacity: { 
+                    duration: presets.feedback.duration,
+                    ease: presets.feedback.ease
+                },
             }}
             {...stripeAnimation}
         >
@@ -151,8 +155,9 @@ Progress.Label = function ProgressLabel({ children }) {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 10 }}
                 transition={{
-                    duration: 0.2,
-                    y: springs.snappy,
+                    duration: presets.feedback.duration,
+                    ease: presets.feedback.ease,
+                    y: springs.feedback,
                 }}
             >
                 {children}

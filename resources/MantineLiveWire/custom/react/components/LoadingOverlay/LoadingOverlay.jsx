@@ -1,7 +1,7 @@
 import React from 'react';
 import { LoadingOverlay as MantineLoadingOverlay } from '@mantine/core';
 import { motion, AnimatePresence } from 'motion/react';
-import { springs, overlayAnimations } from '../../utils/animations';
+import { springs, overlayAnimations, presets } from '../../utils/animations';
 
 // Motion-enhanced overlay
 const MotionOverlay = motion(MantineLoadingOverlay);
@@ -19,15 +19,15 @@ function LoadingOverlay({ wire, mingleData, children }) {
         pulse = true,
     } = mingleData;
 
-    // Pulse animation for loader
+    // Pulse animation with feedback timing
     const pulseAnimation = pulse ? {
         animate: {
             scale: [1, 1.1, 1],
             opacity: [0.7, 1, 0.7],
             transition: {
                 repeat: Infinity,
-                duration: 2,
-                ease: "easeInOut",
+                duration: presets.feedback.duration * 10, // Slower for continuous motion
+                ease: presets.feedback.ease,
             },
         },
     } : {};
@@ -49,7 +49,7 @@ function LoadingOverlay({ wire, mingleData, children }) {
                                     ...pulseAnimation.animate,
                                 }}
                                 exit={{ scale: 0.8, opacity: 0 }}
-                                transition={springs.default}
+                                transition={springs.feedback}
                             >
                                 {loaderProps.children}
                             </motion.div>
@@ -77,7 +77,7 @@ function LoadingOverlay({ wire, mingleData, children }) {
                             transition: 'none',
                         },
                     }}
-                    // Motion animations
+                    // Motion animations using feedback preset
                     initial={{ 
                         opacity: 0,
                         backdropFilter: 'blur(0px)',
@@ -91,15 +91,25 @@ function LoadingOverlay({ wire, mingleData, children }) {
                         backdropFilter: 'blur(0px)',
                     }}
                     transition={{
-                        opacity: { duration: 0.2 },
-                        backdropFilter: { duration: 0.3 },
+                        ...springs.feedback,
+                        opacity: { 
+                            duration: presets.feedback.duration,
+                            ease: presets.feedback.ease
+                        },
+                        backdropFilter: { 
+                            duration: presets.feedback.duration * 1.5,
+                            ease: presets.feedback.ease
+                        },
                     }}
                 >
                     <motion.div
                         initial={{ filter: 'blur(0px)' }}
                         animate={{ filter: 'blur(1px)' }}
                         exit={{ filter: 'blur(0px)' }}
-                        transition={{ duration: 0.3 }}
+                        transition={{ 
+                            duration: presets.feedback.duration * 1.5,
+                            ease: presets.feedback.ease
+                        }}
                     >
                         {children}
                     </motion.div>

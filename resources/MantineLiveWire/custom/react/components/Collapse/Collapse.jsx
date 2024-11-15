@@ -1,7 +1,7 @@
 import React from 'react';
 import { Collapse as MantineCollapse } from '@mantine/core';
 import { motion, AnimatePresence } from 'motion/react';
-import { springs, layout } from '../../utils/animations';
+import { springs, layout, presets } from '../../utils/animations';
 
 // Motion-enhanced collapse
 const MotionCollapse = motion(MantineCollapse);
@@ -27,7 +27,7 @@ function Collapse({ wire, mingleData, children }) {
                     ...styles,
                     content: {
                         ...styles?.content,
-                        transition: 'none', // Remove Mantine's transitions
+                        transition: 'none',
                     },
                 }}
                 initial={{ height: 0, opacity: 0 }}
@@ -35,10 +35,11 @@ function Collapse({ wire, mingleData, children }) {
                     height: opened ? 'auto' : 0,
                     opacity: opened ? 1 : 0,
                     transition: {
-                        height: springs.default,
+                        height: springs.expand,
                         opacity: { 
-                            duration: 0.2,
-                            delay: opened ? 0.1 : 0 
+                            duration: presets.expand.duration,
+                            delay: opened ? 0.1 : 0,
+                            ease: presets.expand.ease
                         },
                     }
                 }}
@@ -46,8 +47,11 @@ function Collapse({ wire, mingleData, children }) {
                     height: 0,
                     opacity: 0,
                     transition: {
-                        height: springs.default,
-                        opacity: { duration: 0.1 },
+                        height: springs.expand,
+                        opacity: { 
+                            duration: presets.expand.duration * 0.5,
+                            ease: presets.expand.ease
+                        },
                     }
                 }}
                 style={{ overflow: 'hidden' }}
@@ -58,8 +62,12 @@ function Collapse({ wire, mingleData, children }) {
                     animate={{ y: 0, opacity: 1 }}
                     exit={{ y: -10, opacity: 0 }}
                     transition={{ 
-                        ...springs.default,
-                        delay: opened ? 0.15 : 0
+                        ...springs.expand,
+                        delay: opened ? 0.15 : 0,
+                        opacity: {
+                            duration: presets.expand.duration,
+                            ease: presets.expand.ease
+                        }
                     }}
                 >
                     {children}

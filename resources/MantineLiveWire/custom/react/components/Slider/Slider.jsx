@@ -1,11 +1,68 @@
 import React from 'react';
 import { Slider as MantineSlider, RangeSlider as MantineRangeSlider } from '@mantine/core';
 import { motion, AnimatePresence } from 'motion/react';
-import { springs, interactive } from '../../utils/animations';
+import { springs, interactive, presets, stagger } from '../../utils/animations';
 
 // Motion-enhanced components
 const MotionSlider = motion(MantineSlider);
 const MotionRangeSlider = motion(MantineRangeSlider);
+
+// Shared animation configurations
+const getEnhancedMarks = (marks, disabled) => marks?.map((mark, index) => ({
+    ...mark,
+    component: motion.div,
+    componentProps: {
+        ...stagger.item,
+        transition: {
+            ...springs.input,
+            delay: index * presets.input.duration * 0.25,
+        },
+        whileHover: !disabled && { scale: 1.2 },
+    },
+}));
+
+const AnimatedLabel = ({ value, label }) => (
+    <AnimatePresence mode="wait">
+        <motion.div
+            key={Array.isArray(value) ? value.join('-') : value}
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 10 }}
+            transition={springs.input}
+        >
+            {typeof label === 'function' ? label(value) : value}
+        </motion.div>
+    </AnimatePresence>
+);
+
+const sharedStyles = (disabled) => ({
+    thumb: {
+        transition: 'none',
+        transform: disabled ? 'none' : 'scale(1.1)',
+        '&:hover': {
+            transform: disabled ? 'none' : 'scale(1.2)',
+        },
+    },
+    track: {
+        transition: 'none',
+    },
+    bar: {
+        transition: 'none',
+    },
+});
+
+const sharedMotionProps = (disabled) => ({
+    initial: { opacity: 0 },
+    animate: { opacity: 1 },
+    transition: { 
+        duration: presets.input.duration,
+        ease: presets.input.ease
+    },
+    ...(!disabled && {
+        whileHover: { scale: 1.02 },
+        whileTap: { scale: 0.98 },
+    }),
+});
 
 function Slider({ wire, mingleData }) {
     const {
@@ -17,7 +74,6 @@ function Slider({ wire, mingleData }) {
         marks,
         label,
         labelAlwaysOn,
-        labelTransitionProps,
         min,
         max,
         step,
@@ -31,36 +87,6 @@ function Slider({ wire, mingleData }) {
         onChangeEnd,
     } = mingleData;
 
-    // Enhanced marks with animations
-    const enhancedMarks = marks?.map((mark, index) => ({
-        ...mark,
-        component: motion.div,
-        componentProps: {
-            initial: { opacity: 0, scale: 0.8 },
-            animate: { opacity: 1, scale: 1 },
-            transition: {
-                ...springs.snappy,
-                delay: index * 0.05, // Stagger effect
-            },
-            whileHover: !disabled && { scale: 1.2 },
-        },
-    }));
-
-    // Custom label component with animations
-    const AnimatedLabel = ({ value }) => (
-        <AnimatePresence mode="wait">
-            <motion.div
-                key={value}
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 10 }}
-                transition={springs.snappy}
-            >
-                {typeof label === 'function' ? label(value) : value}
-            </motion.div>
-        </AnimatePresence>
-    );
-
     return (
         <MotionSlider
             value={value}
@@ -68,10 +94,10 @@ function Slider({ wire, mingleData }) {
             color={color}
             size={size}
             radius={radius}
-            marks={enhancedMarks}
-            label={AnimatedLabel}
+            marks={getEnhancedMarks(marks, disabled)}
+            label={(value) => <AnimatedLabel value={value} label={label} />}
             labelAlwaysOn={labelAlwaysOn}
-            labelTransitionProps={{ duration: 0 }} // Disable Mantine's transitions
+            labelTransitionProps={{ duration: 0 }}
             min={min}
             max={max}
             step={step}
@@ -82,7 +108,7 @@ function Slider({ wire, mingleData }) {
                     <motion.div
                         initial={{ scale: 0 }}
                         animate={{ scale: 1 }}
-                        transition={springs.snappy}
+                        transition={springs.input}
                     >
                         {thumbChildren}
                     </motion.div>
@@ -97,29 +123,8 @@ function Slider({ wire, mingleData }) {
                 if (onChangeEnd) onChangeEnd(value);
             }}
             onChange={(value) => wire.emit('change', value)}
-            styles={(theme) => ({
-                thumb: {
-                    transition: 'none', // Remove Mantine's transitions
-                    transform: disabled ? 'none' : 'scale(1.1)',
-                    '&:hover': {
-                        transform: disabled ? 'none' : 'scale(1.2)',
-                    },
-                },
-                track: {
-                    transition: 'none', // Remove Mantine's transitions
-                },
-                bar: {
-                    transition: 'none', // Remove Mantine's transitions
-                },
-            })}
-            // Motion animations
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.2 }}
-            {...(!disabled && {
-                whileHover: { scale: 1.02 },
-                whileTap: { scale: 0.98 },
-            })}
+            styles={(theme) => sharedStyles(disabled)}
+            {...sharedMotionProps(disabled)}
         />
     );
 }
@@ -134,7 +139,6 @@ Slider.Range = function SliderRange({ wire, mingleData }) {
         marks,
         label,
         labelAlwaysOn,
-        labelTransitionProps,
         min,
         max,
         step,
@@ -149,36 +153,6 @@ Slider.Range = function SliderRange({ wire, mingleData }) {
         onChangeEnd,
     } = mingleData;
 
-    // Enhanced marks with animations
-    const enhancedMarks = marks?.map((mark, index) => ({
-        ...mark,
-        component: motion.div,
-        componentProps: {
-            initial: { opacity: 0, scale: 0.8 },
-            animate: { opacity: 1, scale: 1 },
-            transition: {
-                ...springs.snappy,
-                delay: index * 0.05,
-            },
-            whileHover: !disabled && { scale: 1.2 },
-        },
-    }));
-
-    // Custom label component with animations
-    const AnimatedLabel = ({ value }) => (
-        <AnimatePresence mode="wait">
-            <motion.div
-                key={Array.isArray(value) ? value.join('-') : value}
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 10 }}
-                transition={springs.snappy}
-            >
-                {typeof label === 'function' ? label(value) : value}
-            </motion.div>
-        </AnimatePresence>
-    );
-
     return (
         <MotionRangeSlider
             value={value}
@@ -186,8 +160,8 @@ Slider.Range = function SliderRange({ wire, mingleData }) {
             color={color}
             size={size}
             radius={radius}
-            marks={enhancedMarks}
-            label={AnimatedLabel}
+            marks={getEnhancedMarks(marks, disabled)}
+            label={(value) => <AnimatedLabel value={value} label={label} />}
             labelAlwaysOn={labelAlwaysOn}
             labelTransitionProps={{ duration: 0 }}
             min={min}
@@ -200,7 +174,7 @@ Slider.Range = function SliderRange({ wire, mingleData }) {
                     <motion.div
                         initial={{ scale: 0 }}
                         animate={{ scale: 1 }}
-                        transition={springs.snappy}
+                        transition={springs.input}
                     >
                         {thumbChildren}
                     </motion.div>
@@ -216,29 +190,8 @@ Slider.Range = function SliderRange({ wire, mingleData }) {
                 if (onChangeEnd) onChangeEnd(value);
             }}
             onChange={(value) => wire.emit('change', value)}
-            styles={(theme) => ({
-                thumb: {
-                    transition: 'none',
-                    transform: disabled ? 'none' : 'scale(1.1)',
-                    '&:hover': {
-                        transform: disabled ? 'none' : 'scale(1.2)',
-                    },
-                },
-                track: {
-                    transition: 'none',
-                },
-                bar: {
-                    transition: 'none',
-                },
-            })}
-            // Motion animations
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.2 }}
-            {...(!disabled && {
-                whileHover: { scale: 1.02 },
-                whileTap: { scale: 0.98 },
-            })}
+            styles={(theme) => sharedStyles(disabled)}
+            {...sharedMotionProps(disabled)}
         />
     );
 };

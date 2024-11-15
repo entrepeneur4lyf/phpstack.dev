@@ -2,7 +2,7 @@ import React from 'react';
 import { AppShell as MantineAppShell } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { motion, AnimatePresence } from 'motion/react';
-import { springs, layout } from '../../utils/animations';
+import { springs, layout, presets } from '../../utils/animations';
 
 // Motion-enhanced components
 const MotionHeader = motion(MantineAppShell.Header);
@@ -11,6 +11,32 @@ const MotionAside = motion(MantineAppShell.Aside);
 const MotionFooter = motion(MantineAppShell.Footer);
 const MotionMain = motion(MantineAppShell.Main);
 const MotionSection = motion(MantineAppShell.Section);
+
+// Shared animation configurations
+const getLayoutAnimations = (direction = 'y') => ({
+    layout: true,
+    initial: { opacity: 0, [direction]: direction === 'y' ? -20 : direction === 'x' ? -20 : 0 },
+    animate: { opacity: 1, [direction]: 0 },
+    exit: { opacity: 0, [direction]: direction === 'y' ? 20 : direction === 'x' ? 20 : 0 },
+    transition: {
+        ...springs.expand,
+        opacity: {
+            duration: presets.expand.duration,
+            ease: presets.expand.ease
+        }
+    }
+});
+
+const contentAnimation = {
+    layout: true,
+    initial: { opacity: 0 },
+    animate: { opacity: 1 },
+    exit: { opacity: 0 },
+    transition: {
+        duration: presets.expand.duration,
+        ease: presets.expand.ease
+    }
+};
 
 function AppShell({ wire, mingleData, children }) {
     const [mobileOpened, { toggle: toggleMobile }] = useDisclosure();
@@ -57,21 +83,18 @@ function AppShell({ wire, mingleData, children }) {
             layout={layout}
             withBorder={withBorder}
             zIndex={zIndex}
-            transitionDuration={0} // Disable Mantine's transitions
+            transitionDuration={0}
             disabled={disabled}
             styles={(theme) => ({
                 root: {
-                    transition: 'none', // Remove Mantine's transitions
+                    transition: 'none',
                 },
                 main: {
                     transition: 'none',
                 },
             })}
         >
-            <motion.div
-                layout
-                transition={springs.default}
-            >
+            <motion.div {...contentAnimation}>
                 {children}
             </motion.div>
         </MantineAppShell>
@@ -80,13 +103,8 @@ function AppShell({ wire, mingleData, children }) {
 
 AppShell.Header = function AppShellHeader({ children, ...props }) {
     return (
-        <MotionHeader
-            {...props}
-            initial={{ y: -20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={springs.default}
-        >
-            <motion.div layout transition={springs.default}>
+        <MotionHeader {...props} {...getLayoutAnimations('y')}>
+            <motion.div {...contentAnimation}>
                 {children}
             </motion.div>
         </MotionHeader>
@@ -98,22 +116,13 @@ AppShell.Navbar = function AppShellNavbar({ children, collapsed, ...props }) {
         <AnimatePresence mode="wait">
             <MotionNavbar
                 {...props}
-                initial={{ x: -20, opacity: 0 }}
+                {...getLayoutAnimations('x')}
                 animate={{ 
-                    x: 0,
-                    opacity: 1,
+                    ...getLayoutAnimations('x').animate,
                     width: collapsed ? props.width?.collapsed : props.width?.default,
                 }}
-                exit={{ x: -20, opacity: 0 }}
-                transition={springs.default}
             >
-                <motion.div
-                    layout
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.2 }}
-                >
+                <motion.div {...contentAnimation}>
                     {children}
                 </motion.div>
             </MotionNavbar>
@@ -124,20 +133,8 @@ AppShell.Navbar = function AppShellNavbar({ children, collapsed, ...props }) {
 AppShell.Aside = function AppShellAside({ children, ...props }) {
     return (
         <AnimatePresence mode="wait">
-            <MotionAside
-                {...props}
-                initial={{ x: 20, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                exit={{ x: 20, opacity: 0 }}
-                transition={springs.default}
-            >
-                <motion.div
-                    layout
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.2 }}
-                >
+            <MotionAside {...props} {...getLayoutAnimations('x')}>
+                <motion.div {...contentAnimation}>
                     {children}
                 </motion.div>
             </MotionAside>
@@ -147,13 +144,8 @@ AppShell.Aside = function AppShellAside({ children, ...props }) {
 
 AppShell.Footer = function AppShellFooter({ children, ...props }) {
     return (
-        <MotionFooter
-            {...props}
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={springs.default}
-        >
-            <motion.div layout transition={springs.default}>
+        <MotionFooter {...props} {...getLayoutAnimations('y')}>
+            <motion.div {...contentAnimation}>
                 {children}
             </motion.div>
         </MotionFooter>
@@ -162,15 +154,17 @@ AppShell.Footer = function AppShellFooter({ children, ...props }) {
 
 AppShell.Main = function AppShellMain({ children, ...props }) {
     return (
-        <MotionMain
-            {...props}
-            layout
-            transition={springs.default}
-        >
+        <MotionMain {...props} {...contentAnimation}>
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3 }}
+                transition={{
+                    ...springs.expand,
+                    opacity: {
+                        duration: presets.expand.duration,
+                        ease: presets.expand.ease
+                    }
+                }}
             >
                 {children}
             </motion.div>
@@ -180,15 +174,8 @@ AppShell.Main = function AppShellMain({ children, ...props }) {
 
 AppShell.Section = function AppShellSection({ children, ...props }) {
     return (
-        <MotionSection
-            {...props}
-            layout
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={springs.default}
-        >
-            <motion.div layout transition={springs.default}>
+        <MotionSection {...props} {...getLayoutAnimations('y')}>
+            <motion.div {...contentAnimation}>
                 {children}
             </motion.div>
         </MotionSection>

@@ -1,10 +1,25 @@
 import React from 'react';
 import { Stack as MantineStack } from '@mantine/core';
 import { motion, AnimatePresence, useScroll, useTransform } from 'motion/react';
-import { springs, layout, stagger, scroll } from '../../utils/animations';
+import { springs, layout, stagger, scroll, presets } from '../../utils/animations';
 
 // Motion-enhanced stack
 const MotionStack = motion(MantineStack);
+
+// Shared animation configurations
+const stackItemAnimation = {
+    layout: true,
+    initial: { opacity: 0, y: 20, scale: 0.9 },
+    animate: { opacity: 1, y: 0, scale: 1 },
+    exit: { opacity: 0, y: -20, scale: 0.9 },
+    transition: {
+        ...springs.expand,
+        opacity: {
+            duration: presets.expand.duration,
+            ease: presets.expand.ease
+        }
+    }
+};
 
 function Stack({ wire, mingleData, children }) {
     const {
@@ -20,24 +35,33 @@ function Stack({ wire, mingleData, children }) {
 
     const stackRef = React.useRef(null);
 
-    // Scroll-linked animations
+    // Scroll-linked animations with consistent timing
     const { scrollYProgress } = useScroll({
         target: stackRef,
         offset: ["start end", "end start"]
     });
 
-    // Base animation props
+    // Base animation props with expand preset
     const motionProps = animate ? {
         ...layout.default,
         initial: { opacity: 0 },
         animate: { opacity: 1 },
         exit: { opacity: 0 },
-        transition: springs.default,
+        transition: {
+            ...springs.expand,
+            opacity: {
+                duration: presets.expand.duration,
+                ease: presets.expand.ease
+            }
+        }
     } : {};
 
     // Add scroll animation props if enabled
     const scrollProps = scrollAnimation ? {
-        style: scroll.scaleAndFade(scrollYProgress),
+        style: {
+            ...scroll.scaleAndFade(scrollYProgress),
+            transition: `all ${presets.expand.duration}s ${presets.expand.ease}`
+        }
     } : {};
 
     return (
@@ -63,36 +87,20 @@ function Stack({ wire, mingleData, children }) {
                     {React.Children.map(children, (child, index) => (
                         <motion.div
                             key={index}
-                            layout
-                            variants={{
-                                hidden: { 
-                                    opacity: 0,
-                                    y: 20,
-                                    scale: 0.9,
-                                },
-                                visible: { 
-                                    opacity: 1,
-                                    y: 0,
-                                    scale: 1,
-                                    transition: {
-                                        ...springs.default,
-                                        delay: index * 0.1, // Stagger effect
-                                    },
-                                },
-                                exit: { 
-                                    opacity: 0,
-                                    y: -20,
-                                    scale: 0.9,
-                                },
+                            {...stackItemAnimation}
+                            transition={{
+                                ...springs.expand,
+                                delay: index * presets.expand.duration * 0.25,
+                                opacity: {
+                                    duration: presets.expand.duration,
+                                    ease: presets.expand.ease
+                                }
                             }}
-                            initial="hidden"
-                            animate="visible"
-                            exit="exit"
                             style={{
-                                width: '100%', // Ensure full width
-                                display: 'flex', // Maintain flex properties
-                                alignItems: align, // Match parent alignment
-                                justifyContent: justify, // Match parent justification
+                                width: '100%',
+                                display: 'flex',
+                                alignItems: align,
+                                justifyContent: justify,
                             }}
                         >
                             {child}
@@ -108,11 +116,7 @@ function Stack({ wire, mingleData, children }) {
 Stack.Item = function StackItem({ children, ...props }) {
     return (
         <motion.div
-            layout
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={springs.default}
+            {...stackItemAnimation}
             style={{
                 width: '100%',
                 display: 'flex',

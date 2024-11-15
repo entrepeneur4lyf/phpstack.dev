@@ -1,11 +1,37 @@
 import React from 'react';
 import { Grid as MantineGrid } from '@mantine/core';
 import { motion, AnimatePresence } from 'motion/react';
-import { springs, layout, stagger } from '../../utils/animations';
+import { springs, layout, stagger, presets } from '../../utils/animations';
 
 // Motion-enhanced components
 const MotionGrid = motion(MantineGrid);
 const MotionCol = motion(MantineGrid.Col);
+
+// Shared animation configurations
+const gridItemAnimation = {
+    layout: true,
+    initial: { opacity: 0, scale: 0.9 },
+    animate: { opacity: 1, scale: 1 },
+    exit: { opacity: 0, scale: 0.9 },
+    transition: {
+        ...springs.expand,
+        opacity: {
+            duration: presets.expand.duration,
+            ease: presets.expand.ease
+        }
+    }
+};
+
+const contentAnimation = {
+    layout: true,
+    initial: { opacity: 0 },
+    animate: { opacity: 1 },
+    exit: { opacity: 0 },
+    transition: {
+        duration: presets.expand.duration,
+        ease: presets.expand.ease
+    }
+};
 
 function Grid({ wire, mingleData, children }) {
     const {
@@ -24,6 +50,7 @@ function Grid({ wire, mingleData, children }) {
             justify={justify}
             align={align}
             {...layout.default}
+            transition={springs.expand}
         >
             <motion.div
                 {...stagger.container}
@@ -37,6 +64,10 @@ function Grid({ wire, mingleData, children }) {
                     <motion.div
                         key={index}
                         {...stagger.item}
+                        transition={{
+                            ...springs.expand,
+                            delay: index * presets.expand.duration * 0.25
+                        }}
                         style={{ display: 'flex' }}
                     >
                         {child}
@@ -72,40 +103,20 @@ Grid.Col = function GridCol({ wire, mingleData, children }) {
                 offset={offset}
                 order={order}
                 grow={grow}
-                layout // Enable layout animations
-                initial={{ 
-                    opacity: 0,
-                    scale: 0.9,
-                    y: 20,
-                }}
-                animate={{ 
-                    opacity: 1,
-                    scale: 1,
-                    y: 0,
-                }}
-                exit={{ 
-                    opacity: 0,
-                    scale: 0.9,
-                    y: -20,
-                }}
+                {...gridItemAnimation}
                 transition={{
-                    ...springs.default,
-                    layout: { // Specific transition for layout changes
-                        type: "spring",
-                        bounce: 0.2,
-                        duration: 0.6,
-                    },
+                    ...springs.expand,
+                    layout: {
+                        duration: presets.expand.duration,
+                        ease: presets.expand.ease
+                    }
                 }}
             >
                 <motion.div
-                    layout
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.2 }}
+                    {...contentAnimation}
                     style={{
-                        height: '100%', // Ensure full height for animations
-                        width: '100%', // Ensure full width for animations
+                        height: '100%',
+                        width: '100%',
                     }}
                 >
                     {children}
@@ -119,11 +130,7 @@ Grid.Col = function GridCol({ wire, mingleData, children }) {
 Grid.Item = function GridItem({ children, ...props }) {
     return (
         <motion.div
-            layout
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.9 }}
-            transition={springs.default}
+            {...gridItemAnimation}
             style={{
                 height: '100%',
                 width: '100%',

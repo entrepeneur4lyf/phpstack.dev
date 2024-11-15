@@ -50,6 +50,58 @@ export const presets = {
             mass: 0.5
         },
         duration: 0.1
+    },
+
+    // Smooth animations for expanding/collapsing content
+    expand: {
+        spring: {
+            type: "spring",
+            stiffness: 250,
+            damping: 25,
+            mass: 1
+        },
+        duration: 0.25,
+        ease: [0.4, 0, 0.2, 1]
+    },
+
+    // Quick animations for feedback components
+    feedback: {
+        distance: 20,
+        scale: 0.95,
+        spring: {
+            type: "spring",
+            stiffness: 500,
+            damping: 30,
+            mass: 0.7
+        },
+        duration: 0.2,
+        ease: [0.25, 0.1, 0.25, 1]
+    },
+
+    // Larger distance for notifications
+    notification: {
+        distance: 50,
+        scale: 0.9,
+        spring: {
+            type: "spring",
+            stiffness: 450,
+            damping: 30,
+            mass: 0.7
+        },
+        duration: 0.2,
+        ease: [0.25, 0.1, 0.25, 1]
+    },
+
+    // Subtle animations for input components
+    input: {
+        spring: {
+            type: "spring",
+            stiffness: 400,
+            damping: 35,
+            mass: 0.6
+        },
+        duration: 0.15,
+        ease: [0.4, 0, 0.2, 1]
     }
 };
 
@@ -62,7 +114,11 @@ export const springs = {
         stiffness: 200,
         damping: 15,
         mass: 1
-    }
+    },
+    expand: presets.expand.spring,
+    feedback: presets.feedback.spring,
+    notification: presets.notification.spring,
+    input: presets.input.spring
 };
 
 // Duration-based transitions

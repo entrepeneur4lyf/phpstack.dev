@@ -1,10 +1,43 @@
 import React from 'react';
 import { Switch } from '@mantine/core';
 import { motion, AnimatePresence } from 'motion/react';
-import { springs, interactive } from '../../utils/animations';
+import { springs, interactive, presets } from '../../utils/animations';
 
 // Motion-enhanced switch
 const MotionSwitch = motion(Switch);
+
+// Shared animation configurations
+const AnimatedLabel = ({ children }) => (
+    <AnimatePresence mode="wait">
+        <motion.div
+            key={children}
+            initial={{ opacity: 0, x: -10 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 10 }}
+            transition={{
+                ...springs.input,
+                duration: presets.input.duration,
+                ease: presets.input.ease
+            }}
+        >
+            {children}
+        </motion.div>
+    </AnimatePresence>
+);
+
+const AnimatedText = ({ children }) => (
+    <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ 
+            duration: presets.input.duration,
+            ease: presets.input.ease
+        }}
+    >
+        {children}
+    </motion.div>
+);
 
 function SwitchInput({ wire, mingleData }) {
     const {
@@ -26,22 +59,7 @@ function SwitchInput({ wire, mingleData }) {
         'aria-label': ariaLabel,
     } = mingleData;
 
-    // Custom label component with animations
-    const AnimatedLabel = ({ children }) => (
-        <AnimatePresence mode="wait">
-            <motion.div
-                key={children}
-                initial={{ opacity: 0, x: -10 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: 10 }}
-                transition={springs.snappy}
-            >
-                {children}
-            </motion.div>
-        </AnimatePresence>
-    );
-
-    // Custom thumb icon with animations
+    // Custom thumb icon with input preset animations
     const AnimatedThumbIcon = thumbIcon && (
         <motion.div
             initial={{ scale: 0, rotate: -45 }}
@@ -49,7 +67,7 @@ function SwitchInput({ wire, mingleData }) {
                 scale: 1,
                 rotate: 0,
             }}
-            transition={springs.snappy}
+            transition={springs.input}
         >
             {thumbIcon}
         </motion.div>
@@ -67,32 +85,13 @@ function SwitchInput({ wire, mingleData }) {
             size={size}
             radius={radius}
             disabled={disabled}
-            onLabel={onLabel && (
-                <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.2 }}
-                >
-                    {onLabel}
-                </motion.div>
-            )}
-            offLabel={offLabel && (
-                <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.2 }}
-                >
-                    {offLabel}
-                </motion.div>
-            )}
+            onLabel={onLabel && <AnimatedText>{onLabel}</AnimatedText>}
+            offLabel={offLabel && <AnimatedText>{offLabel}</AnimatedText>}
             thumbIcon={AnimatedThumbIcon}
             wrapperProps={{
                 ...wrapperProps,
                 style: {
                     ...wrapperProps?.style,
-                    // Ensure proper stacking for animations
                     position: 'relative',
                     zIndex: 1,
                 },
@@ -102,25 +101,29 @@ function SwitchInput({ wire, mingleData }) {
             onChange={(event) => wire.emit('change', event.currentTarget.checked)}
             styles={(theme) => ({
                 input: {
-                    transition: 'none', // Remove Mantine's transitions
+                    transition: 'none',
                 },
                 track: {
-                    transition: 'none', // Remove Mantine's transitions
+                    transition: 'none',
                 },
                 thumb: {
-                    transition: 'none', // Remove Mantine's transitions
+                    transition: 'none',
                 },
             })}
-            // Motion animations
-            initial={false} // Prevent initial animation
+            // Motion animations with input preset
+            initial={false}
             animate={{
-                // Smooth color transition through CSS
-                '--switch-bg': checked ? theme => theme.colors[color || 'blue'][6] : theme => theme.colors.gray[2],
+                '--switch-bg': checked ? 
+                    theme => theme.colors[color || 'blue'][6] : 
+                    theme => theme.colors.gray[2],
             }}
-            transition={{ duration: 0.2 }}
+            transition={{ 
+                duration: presets.input.duration,
+                ease: presets.input.ease
+            }}
             {...(!disabled && {
-                whileHover: { scale: 1.02 },
-                whileTap: { scale: 0.98 },
+                ...interactive.button,
+                transition: springs.input
             })}
         >
             <motion.div
@@ -130,10 +133,17 @@ function SwitchInput({ wire, mingleData }) {
                     x: checked ? '100%' : '0%',
                     scale: checked ? 1.1 : 1,
                 }}
-                transition={springs.snappy}
+                transition={{
+                    ...springs.input,
+                    scale: {
+                        duration: presets.input.duration,
+                        ease: presets.input.ease
+                    }
+                }}
                 {...(!disabled && {
                     whileHover: { scale: 1.15 },
                     whileTap: { scale: 0.95 },
+                    transition: springs.input
                 })}
             />
         </MotionSwitch>

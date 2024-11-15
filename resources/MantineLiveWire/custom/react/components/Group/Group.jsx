@@ -1,10 +1,25 @@
 import React from 'react';
 import { Group as MantineGroup } from '@mantine/core';
 import { motion, AnimatePresence, useScroll, useTransform } from 'motion/react';
-import { springs, layout, stagger, scroll } from '../../utils/animations';
+import { springs, layout, stagger, scroll, presets } from '../../utils/animations';
 
 // Motion-enhanced group
 const MotionGroup = motion(MantineGroup);
+
+// Shared animation configurations
+const groupItemAnimation = {
+    layout: true,
+    initial: { opacity: 0, x: 20, scale: 0.9 },
+    animate: { opacity: 1, x: 0, scale: 1 },
+    exit: { opacity: 0, x: -20, scale: 0.9 },
+    transition: {
+        ...springs.expand,
+        opacity: {
+            duration: presets.expand.duration,
+            ease: presets.expand.ease
+        }
+    }
+};
 
 function Group({ wire, mingleData, children }) {
     const {
@@ -21,24 +36,33 @@ function Group({ wire, mingleData, children }) {
 
     const groupRef = React.useRef(null);
 
-    // Scroll-linked animations
+    // Scroll-linked animations with consistent timing
     const { scrollYProgress } = useScroll({
         target: groupRef,
         offset: ["start end", "end start"]
     });
 
-    // Base animation props
+    // Base animation props with expand preset
     const motionProps = animate ? {
         ...layout.default,
         initial: { opacity: 0 },
         animate: { opacity: 1 },
         exit: { opacity: 0 },
-        transition: springs.default,
+        transition: {
+            ...springs.expand,
+            opacity: {
+                duration: presets.expand.duration,
+                ease: presets.expand.ease
+            }
+        }
     } : {};
 
     // Add scroll animation props if enabled
     const scrollProps = scrollAnimation ? {
-        style: scroll.scaleAndFade(scrollYProgress),
+        style: {
+            ...scroll.scaleAndFade(scrollYProgress),
+            transition: `all ${presets.expand.duration}s ${presets.expand.ease}`
+        }
     } : {};
 
     return (
@@ -69,31 +93,15 @@ function Group({ wire, mingleData, children }) {
                     {React.Children.map(children, (child, index) => (
                         <motion.div
                             key={index}
-                            layout
-                            variants={{
-                                hidden: { 
-                                    opacity: 0,
-                                    x: 20,
-                                    scale: 0.9,
-                                },
-                                visible: { 
-                                    opacity: 1,
-                                    x: 0,
-                                    scale: 1,
-                                    transition: {
-                                        ...springs.default,
-                                        delay: index * 0.05, // Faster stagger for horizontal layout
-                                    },
-                                },
-                                exit: { 
-                                    opacity: 0,
-                                    x: -20,
-                                    scale: 0.9,
-                                },
+                            {...groupItemAnimation}
+                            transition={{
+                                ...springs.expand,
+                                delay: index * presets.expand.duration * 0.25,
+                                opacity: {
+                                    duration: presets.expand.duration,
+                                    ease: presets.expand.ease
+                                }
                             }}
-                            initial="hidden"
-                            animate="visible"
-                            exit="exit"
                             style={{
                                 flex: grow ? '1 1 0%' : 'initial',
                                 maxWidth: preventGrowOverflow && grow ? '100%' : 'none',
@@ -114,11 +122,7 @@ function Group({ wire, mingleData, children }) {
 Group.Item = function GroupItem({ children, ...props }) {
     return (
         <motion.div
-            layout
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -20 }}
-            transition={springs.default}
+            {...groupItemAnimation}
             style={{
                 display: 'flex',
                 alignItems: 'center',

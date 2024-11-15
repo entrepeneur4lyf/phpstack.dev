@@ -1,7 +1,7 @@
 import React from 'react';
 import { ColorPicker as MantineColorPicker } from '@mantine/core';
 import { motion, AnimatePresence } from 'motion/react';
-import { springs, interactive, layout } from '../../utils/animations';
+import { springs, interactive, layout, presets, stagger } from '../../utils/animations';
 
 // Motion-enhanced picker
 const MotionPicker = motion(MantineColorPicker);
@@ -44,18 +44,16 @@ function ColorPicker({ wire, mingleData }) {
         },
     };
 
-    // Wrap swatches with motion for animations
+    // Wrap swatches with motion for animations using stagger preset
     const enhancedSwatches = swatches?.map((swatch, index) => ({
         color: swatch,
         component: motion.div,
         componentProps: {
             layout: true,
-            initial: { opacity: 0, scale: 0.8 },
-            animate: { opacity: 1, scale: 1 },
-            exit: { opacity: 0, scale: 0.8 },
+            ...stagger.item,
             transition: {
-                ...springs.snappy,
-                delay: index * 0.05, // Stagger effect
+                ...springs.input,
+                delay: index * presets.input.duration * 0.25, // Stagger based on input timing
             },
             whileHover: { scale: 1.1 },
             whileTap: { scale: 0.95 },
@@ -92,7 +90,7 @@ function ColorPicker({ wire, mingleData }) {
                             right: 0,
                             bottom: 0,
                             background: value,
-                            transition: 'background 0.2s ease',
+                            transition: `background ${presets.input.duration}s ${presets.input.ease}`,
                         },
                     },
                 })}
@@ -100,31 +98,35 @@ function ColorPicker({ wire, mingleData }) {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
-                transition={springs.default}
+                transition={springs.input}
             >
                 {withPicker && (
                     <motion.div
+                        {...stagger.container}
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        transition={{ duration: 0.2 }}
+                        transition={{ 
+                            duration: presets.input.duration,
+                            ease: presets.input.ease
+                        }}
                     >
                         {/* Picker content */}
                         <motion.div
                             className="saturation-slider"
-                            whileHover={{ scale: 1.02 }}
-                            transition={springs.snappy}
+                            {...interactive.button}
+                            transition={springs.input}
                         />
                         <motion.div
                             className="hue-slider"
-                            whileHover={{ scale: 1.02 }}
-                            transition={springs.snappy}
+                            {...interactive.button}
+                            transition={springs.input}
                         />
                         {format === 'rgba' && (
                             <motion.div
                                 className="alpha-slider"
-                                whileHover={{ scale: 1.02 }}
-                                transition={springs.snappy}
+                                {...interactive.button}
+                                transition={springs.input}
                             />
                         )}
                     </motion.div>

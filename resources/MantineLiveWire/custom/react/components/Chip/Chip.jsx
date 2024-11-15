@@ -1,11 +1,40 @@
 import React from 'react';
 import { Chip as MantineChip } from '@mantine/core';
 import { motion, AnimatePresence } from 'motion/react';
-import { springs, interactive, layout, stagger } from '../../utils/animations';
+import { springs, interactive, layout, stagger, presets } from '../../utils/animations';
 
 // Motion-enhanced components
 const MotionChip = motion(MantineChip);
 const MotionGroup = motion(MantineChip.Group);
+
+// Shared animation configurations
+const getChipAnimations = (checked, disabled, color) => ({
+    layout: true,
+    initial: false,
+    animate: {
+        scale: checked ? 1.05 : 1,
+        backgroundColor: checked 
+            ? theme => theme.colors[color || theme.primaryColor][1]
+            : theme => theme.colors.gray[0],
+    },
+    transition: {
+        ...springs.input,
+        backgroundColor: {
+            duration: presets.input.duration,
+            ease: presets.input.ease
+        }
+    },
+    ...(!disabled && {
+        whileHover: { 
+            scale: checked ? 1.08 : 1.05,
+            backgroundColor: checked
+                ? theme => theme.colors[color || theme.primaryColor][2]
+                : theme => theme.colors.gray[1],
+        },
+        whileTap: { scale: 0.95 },
+        transition: springs.input
+    })
+});
 
 function Chip({ wire, mingleData, children }) {
     const {
@@ -21,7 +50,7 @@ function Chip({ wire, mingleData, children }) {
         wrapperProps,
     } = mingleData;
 
-    // Animated icon component
+    // Animated icon with input preset
     const AnimatedIcon = icon && (
         <motion.div
             initial={{ scale: 0, rotate: -45 }}
@@ -30,7 +59,7 @@ function Chip({ wire, mingleData, children }) {
                 rotate: 0,
                 opacity: checked ? 1 : 0.7,
             }}
-            transition={springs.snappy}
+            transition={springs.input}
         >
             {icon}
         </motion.div>
@@ -57,34 +86,16 @@ function Chip({ wire, mingleData, children }) {
             onChange={(checked) => wire.emit('change', checked)}
             styles={(theme) => ({
                 root: {
-                    transition: 'none', // Remove Mantine's transitions
+                    transition: 'none',
                 },
                 label: {
-                    transition: 'none', // Remove Mantine's transitions
+                    transition: 'none',
                 },
                 checkIcon: {
-                    transition: 'none', // Remove Mantine's transitions
+                    transition: 'none',
                 },
             })}
-            // Motion animations
-            layout
-            initial={false} // Prevent initial animation
-            animate={{
-                scale: checked ? 1.05 : 1,
-                backgroundColor: checked 
-                    ? theme => theme.colors[color || theme.primaryColor][1]
-                    : theme => theme.colors.gray[0],
-            }}
-            transition={springs.snappy}
-            {...(!disabled && {
-                whileHover: { 
-                    scale: checked ? 1.08 : 1.05,
-                    backgroundColor: checked
-                        ? theme => theme.colors[color || theme.primaryColor][2]
-                        : theme => theme.colors.gray[1],
-                },
-                whileTap: { scale: 0.95 },
-            })}
+            {...getChipAnimations(checked, disabled, color)}
         >
             <motion.div
                 initial={false}
@@ -92,7 +103,13 @@ function Chip({ wire, mingleData, children }) {
                     scale: checked ? 1.05 : 1,
                     fontWeight: checked ? 600 : 400,
                 }}
-                transition={springs.snappy}
+                transition={{
+                    ...springs.input,
+                    fontWeight: {
+                        duration: presets.input.duration,
+                        ease: presets.input.ease
+                    }
+                }}
             >
                 {children}
             </motion.div>
@@ -114,6 +131,7 @@ Chip.Group = function ChipGroup({ wire, mingleData, children }) {
             defaultValue={defaultValue}
             onChange={(value) => wire.emit('change', value)}
             {...layout.default}
+            transition={springs.input}
         >
             <motion.div
                 {...stagger.container}
@@ -127,6 +145,10 @@ Chip.Group = function ChipGroup({ wire, mingleData, children }) {
                     <motion.div
                         key={index}
                         {...stagger.item}
+                        transition={{
+                            ...springs.input,
+                            delay: index * presets.input.duration * 0.25
+                        }}
                         style={{ display: 'inline-flex' }}
                     >
                         {child}

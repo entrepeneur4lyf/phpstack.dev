@@ -1,7 +1,7 @@
 import React from 'react';
 import { Notification as MantineNotification } from '@mantine/core';
 import { motion, AnimatePresence } from 'motion/react';
-import { springs, interactive, layout } from '../../utils/animations';
+import { springs, interactive, layout, presets, overlayAnimations } from '../../utils/animations';
 
 // Motion-enhanced notification
 const MotionNotification = motion(MantineNotification);
@@ -23,51 +23,14 @@ function Notification({ wire, mingleData, children }) {
         position = 'right',
     } = mingleData;
 
-    // Get position-based animations
-    const getPositionAnimation = () => {
-        const distance = 50;
-        switch (position) {
-            case 'left':
-                return {
-                    initial: { opacity: 0, x: -distance },
-                    animate: { opacity: 1, x: 0 },
-                    exit: { opacity: 0, x: -distance },
-                };
-            case 'right':
-                return {
-                    initial: { opacity: 0, x: distance },
-                    animate: { opacity: 1, x: 0 },
-                    exit: { opacity: 0, x: distance },
-                };
-            case 'top':
-                return {
-                    initial: { opacity: 0, y: -distance },
-                    animate: { opacity: 1, y: 0 },
-                    exit: { opacity: 0, y: -distance },
-                };
-            case 'bottom':
-                return {
-                    initial: { opacity: 0, y: distance },
-                    animate: { opacity: 1, y: 0 },
-                    exit: { opacity: 0, y: distance },
-                };
-            default:
-                return {
-                    initial: { opacity: 0, scale: 0.9 },
-                    animate: { opacity: 1, scale: 1 },
-                    exit: { opacity: 0, scale: 0.9 },
-                };
-        }
-    };
-
     // Loading animation
     const loadingAnimation = loading ? {
         animate: {
             opacity: [1, 0.7, 1],
             transition: {
                 repeat: Infinity,
-                duration: 1.5,
-                ease: "easeInOut",
+                duration: presets.notification.duration * 7.5,
+                ease: presets.notification.ease,
             },
         },
     } : {};
@@ -89,7 +52,7 @@ function Notification({ wire, mingleData, children }) {
                                 opacity: 1,
                                 ...loadingAnimation.animate,
                             }}
-                            transition={springs.snappy}
+                            transition={springs.notification}
                         >
                             {icon}
                         </motion.div>
@@ -101,12 +64,8 @@ function Notification({ wire, mingleData, children }) {
                 closeButtonProps={closeButtonProps}
                 classNames={classNames}
                 styles={styles}
-                // Motion animations
-                {...getPositionAnimation()}
-                transition={{
-                    ...springs.default,
-                    opacity: { duration: 0.2 },
-                }}
+                // Motion animations using notification preset
+                {...overlayAnimations.getPositionAnimation(position, 'notification')}
                 {...loadingAnimation}
                 layout
             >
@@ -114,6 +73,7 @@ function Notification({ wire, mingleData, children }) {
                     <motion.div
                         style={{ position: 'absolute', top: 8, right: 8 }}
                         {...interactive.button}
+                        transition={springs.input}
                     >
                         <MantineNotification.CloseButton
                             {...closeButtonProps}
@@ -125,7 +85,10 @@ function Notification({ wire, mingleData, children }) {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    transition={{ duration: 0.2 }}
+                    transition={{ 
+                        duration: presets.notification.duration,
+                        ease: presets.notification.ease
+                    }}
                 >
                     {title && (
                         <motion.div
@@ -133,8 +96,12 @@ function Notification({ wire, mingleData, children }) {
                             initial={{ opacity: 0, x: -20 }}
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ 
-                                ...springs.default,
-                                delay: 0.1,
+                                ...springs.notification,
+                                delay: presets.notification.duration * 0.5,
+                                opacity: {
+                                    duration: presets.notification.duration,
+                                    ease: presets.notification.ease
+                                }
                             }}
                         >
                             <MantineNotification.Title>{title}</MantineNotification.Title>
@@ -145,8 +112,9 @@ function Notification({ wire, mingleData, children }) {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ 
-                            duration: 0.2,
-                            delay: 0.15,
+                            duration: presets.notification.duration,
+                            delay: presets.notification.duration * 0.75,
+                            ease: presets.notification.ease
                         }}
                     >
                         {children}

@@ -1,10 +1,28 @@
 import React from 'react';
 import { Rating as MantineRating } from '@mantine/core';
 import { motion, AnimatePresence } from 'motion/react';
-import { springs, interactive, stagger } from '../../utils/animations';
+import { springs, interactive, stagger, presets } from '../../utils/animations';
 
 // Motion-enhanced rating
 const MotionRating = motion(MantineRating);
+
+// Shared animation configurations
+const getSymbolAnimations = (index, readOnly) => ({
+    initial: { scale: 0, opacity: 0 },
+    animate: { 
+        scale: 1,
+        opacity: 1,
+    },
+    transition: {
+        ...springs.input,
+        delay: index * presets.input.duration * 0.25,
+    },
+    ...(!readOnly && {
+        whileHover: { scale: 1.2 },
+        whileTap: { scale: 0.9 },
+        transition: springs.input
+    })
+});
 
 function Rating({ wire, mingleData }) {
     const {
@@ -20,22 +38,13 @@ function Rating({ wire, mingleData }) {
         fullSymbol,
     } = mingleData;
 
-    // Animated symbol components
+    // Animated symbol components with input preset
     const AnimatedEmptySymbol = emptySymbol && ((props) => (
         <motion.div
-            initial={{ scale: 0, opacity: 0 }}
+            {...getSymbolAnimations(props.index, readOnly)}
             animate={{ 
-                scale: 1,
+                ...getSymbolAnimations(props.index, readOnly).animate,
                 opacity: 0.6,
-                rotate: [0, 10, 0],
-            }}
-            transition={{
-                ...springs.snappy,
-                delay: props.index * 0.05, // Stagger effect
-            }}
-            whileHover={!readOnly && { 
-                scale: 1.2,
-                opacity: 0.8,
             }}
         >
             {emptySymbol}
@@ -44,19 +53,10 @@ function Rating({ wire, mingleData }) {
 
     const AnimatedFullSymbol = fullSymbol && ((props) => (
         <motion.div
-            initial={{ scale: 0, opacity: 0 }}
+            {...getSymbolAnimations(props.index, readOnly)}
             animate={{ 
-                scale: 1,
+                ...getSymbolAnimations(props.index, readOnly).animate,
                 opacity: 1,
-                rotate: [0, -10, 0],
-            }}
-            transition={{
-                ...springs.snappy,
-                delay: props.index * 0.05, // Stagger effect
-            }}
-            whileHover={!readOnly && { 
-                scale: 1.2,
-                rotate: [0, 10, 0],
             }}
         >
             {fullSymbol}
@@ -78,28 +78,22 @@ function Rating({ wire, mingleData }) {
             onChange={(value) => wire.emit('change', value)}
             styles={(theme) => ({
                 symbolGroup: {
-                    gap: '4px', // Consistent spacing for animations
+                    gap: '4px',
                 },
                 symbol: {
-                    transition: 'none', // Remove Mantine's transitions
+                    transition: 'none',
                     '&[data-filled]': {
                         transition: 'none',
                     },
                 },
             })}
-            // Motion animations for the entire rating
-            initial="hidden"
-            animate="visible"
-            variants={{
-                hidden: { opacity: 0, y: 20 },
-                visible: {
-                    opacity: 1,
-                    y: 0,
-                    transition: {
-                        ...springs.default,
-                        staggerChildren: 0.05,
-                    },
-                },
+            // Motion animations with input preset
+            {...stagger.container}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{
+                ...springs.input,
+                staggerChildren: presets.input.duration * 0.25
             }}
         >
             <motion.div
@@ -107,31 +101,21 @@ function Rating({ wire, mingleData }) {
                 animate={{
                     scale: value ? [1.1, 1] : 1,
                 }}
-                transition={springs.bouncy}
+                transition={springs.input}
             >
-                {/* Rating content */}
                 {Array.from({ length: count }).map((_, index) => (
                     <motion.div
                         key={index}
-                        variants={{
-                            hidden: { opacity: 0, scale: 0, y: 20 },
-                            visible: { 
-                                opacity: 1,
-                                scale: 1,
-                                y: 0,
-                                transition: {
-                                    ...springs.snappy,
-                                    delay: index * 0.05,
-                                },
-                            },
+                        {...stagger.item}
+                        transition={{
+                            ...springs.input,
+                            delay: index * presets.input.duration * 0.25
                         }}
-                        whileHover={!readOnly && {
-                            scale: 1.2,
-                            transition: springs.snappy,
-                        }}
-                        whileTap={!readOnly && {
-                            scale: 0.9,
-                        }}
+                        {...(!readOnly && {
+                            whileHover: { scale: 1.2 },
+                            whileTap: { scale: 0.9 },
+                            transition: springs.input
+                        })}
                         style={{
                             display: 'inline-flex',
                             alignItems: 'center',
