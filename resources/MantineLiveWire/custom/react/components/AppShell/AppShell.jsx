@@ -1,6 +1,16 @@
 import React from 'react';
 import { AppShell as MantineAppShell } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
+import { motion, AnimatePresence } from 'motion/react';
+import { springs, layout } from '../../utils/animations';
+
+// Motion-enhanced components
+const MotionHeader = motion(MantineAppShell.Header);
+const MotionNavbar = motion(MantineAppShell.Navbar);
+const MotionAside = motion(MantineAppShell.Aside);
+const MotionFooter = motion(MantineAppShell.Footer);
+const MotionMain = motion(MantineAppShell.Main);
+const MotionSection = motion(MantineAppShell.Section);
 
 function AppShell({ wire, mingleData, children }) {
     const [mobileOpened, { toggle: toggleMobile }] = useDisclosure();
@@ -47,60 +57,141 @@ function AppShell({ wire, mingleData, children }) {
             layout={layout}
             withBorder={withBorder}
             zIndex={zIndex}
-            transitionDuration={transitionDuration}
-            transitionTimingFunction={transitionTimingFunction}
+            transitionDuration={0} // Disable Mantine's transitions
             disabled={disabled}
+            styles={(theme) => ({
+                root: {
+                    transition: 'none', // Remove Mantine's transitions
+                },
+                main: {
+                    transition: 'none',
+                },
+            })}
         >
-            {children}
+            <motion.div
+                layout
+                transition={springs.default}
+            >
+                {children}
+            </motion.div>
         </MantineAppShell>
     );
 }
 
 AppShell.Header = function AppShellHeader({ children, ...props }) {
     return (
-        <MantineAppShell.Header {...props}>
-            {children}
-        </MantineAppShell.Header>
+        <MotionHeader
+            {...props}
+            initial={{ y: -20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={springs.default}
+        >
+            <motion.div layout transition={springs.default}>
+                {children}
+            </motion.div>
+        </MotionHeader>
     );
 };
 
-AppShell.Navbar = function AppShellNavbar({ children, ...props }) {
+AppShell.Navbar = function AppShellNavbar({ children, collapsed, ...props }) {
     return (
-        <MantineAppShell.Navbar {...props}>
-            {children}
-        </MantineAppShell.Navbar>
+        <AnimatePresence mode="wait">
+            <MotionNavbar
+                {...props}
+                initial={{ x: -20, opacity: 0 }}
+                animate={{ 
+                    x: 0,
+                    opacity: 1,
+                    width: collapsed ? props.width?.collapsed : props.width?.default,
+                }}
+                exit={{ x: -20, opacity: 0 }}
+                transition={springs.default}
+            >
+                <motion.div
+                    layout
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                >
+                    {children}
+                </motion.div>
+            </MotionNavbar>
+        </AnimatePresence>
     );
 };
 
 AppShell.Aside = function AppShellAside({ children, ...props }) {
     return (
-        <MantineAppShell.Aside {...props}>
-            {children}
-        </MantineAppShell.Aside>
+        <AnimatePresence mode="wait">
+            <MotionAside
+                {...props}
+                initial={{ x: 20, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                exit={{ x: 20, opacity: 0 }}
+                transition={springs.default}
+            >
+                <motion.div
+                    layout
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                >
+                    {children}
+                </motion.div>
+            </MotionAside>
+        </AnimatePresence>
     );
 };
 
 AppShell.Footer = function AppShellFooter({ children, ...props }) {
     return (
-        <MantineAppShell.Footer {...props}>
-            {children}
-        </MantineAppShell.Footer>
+        <MotionFooter
+            {...props}
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={springs.default}
+        >
+            <motion.div layout transition={springs.default}>
+                {children}
+            </motion.div>
+        </MotionFooter>
     );
 };
 
 AppShell.Main = function AppShellMain({ children, ...props }) {
     return (
-        <MantineAppShell.Main {...props}>
-            {children}
-        </MantineAppShell.Main>
+        <MotionMain
+            {...props}
+            layout
+            transition={springs.default}
+        >
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+            >
+                {children}
+            </motion.div>
+        </MotionMain>
     );
 };
 
 AppShell.Section = function AppShellSection({ children, ...props }) {
     return (
-        <MantineAppShell.Section {...props}>
-            {children}
-        </MantineAppShell.Section>
+        <MotionSection
+            {...props}
+            layout
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={springs.default}
+        >
+            <motion.div layout transition={springs.default}>
+                {children}
+            </motion.div>
+        </MotionSection>
     );
 };
 

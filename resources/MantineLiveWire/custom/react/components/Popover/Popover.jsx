@@ -1,12 +1,17 @@
 import React from 'react';
 import { Popover as MantinePopover } from '@mantine/core';
+import { motion, AnimatePresence } from 'motion/react';
+import { overlayAnimations, springs, layout } from '../../utils/animations';
+
+// Motion-enhanced components
+const MotionDropdown = motion(MantinePopover.Dropdown);
 
 function Popover({ wire, mingleData, children }) {
     const {
         opened,
         onChange,
         width,
-        position,
+        position = 'bottom',
         offset,
         withArrow,
         arrowSize,
@@ -44,7 +49,15 @@ function Popover({ wire, mingleData, children }) {
             clickOutsideEvents={clickOutsideEvents}
             shadow={shadow}
             classNames={classNames}
-            styles={styles}
+            styles={{
+                ...styles,
+                dropdown: {
+                    ...styles?.dropdown,
+                    // Remove Mantine's transitions
+                    transition: 'none',
+                },
+            }}
+            transitionProps={{ duration: 0 }} // Disable Mantine's transitions
         >
             {children}
         </MantinePopover>
@@ -56,7 +69,22 @@ Popover.Target = function PopoverTarget({ wire, mingleData, children }) {
 };
 
 Popover.Dropdown = function PopoverDropdown({ wire, mingleData, children }) {
-    return <MantinePopover.Dropdown>{children}</MantinePopover.Dropdown>;
+    const { position = 'bottom' } = mingleData;
+
+    return (
+        <AnimatePresence mode="wait">
+            <MotionDropdown
+                {...mingleData}
+                {...overlayAnimations.getPositionAnimation(position, 'popover')}
+            >
+                <motion.div
+                    {...layout.content}
+                >
+                    {children}
+                </motion.div>
+            </MotionDropdown>
+        </AnimatePresence>
+    );
 };
 
 export default Popover;

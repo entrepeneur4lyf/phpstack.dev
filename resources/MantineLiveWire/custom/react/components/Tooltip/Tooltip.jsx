@@ -1,11 +1,17 @@
 import React from 'react';
 import { Tooltip as MantineTooltip } from '@mantine/core';
+import { motion, AnimatePresence } from 'motion/react';
+import { overlayAnimations, springs } from '../../utils/animations';
+
+// Motion-enhanced tooltip
+const MotionTooltip = motion(MantineTooltip);
+const MotionFloating = motion(MantineTooltip.Floating);
 
 function Tooltip({ wire, mingleData, children }) {
     const {
         label,
         color,
-        position,
+        position = 'top',
         offset,
         withArrow,
         arrowSize,
@@ -26,7 +32,7 @@ function Tooltip({ wire, mingleData, children }) {
     } = mingleData;
 
     return (
-        <MantineTooltip
+        <MotionTooltip
             label={label}
             color={color}
             position={position}
@@ -41,15 +47,22 @@ function Tooltip({ wire, mingleData, children }) {
             multiline={multiline}
             width={width}
             inline={inline}
-            transitionProps={transitionProps}
+            transitionProps={{ duration: 0 }} // Disable Mantine's transitions
             openDelay={openDelay}
             closeDelay={closeDelay}
             refProp={refProp}
             classNames={classNames}
-            styles={styles}
+            styles={{
+                ...styles,
+                tooltip: {
+                    ...styles?.tooltip,
+                    transition: 'none',
+                },
+            }}
+            {...overlayAnimations.getPositionAnimation(position, 'tooltip')}
         >
             {children}
-        </MantineTooltip>
+        </MotionTooltip>
     );
 }
 
@@ -71,7 +84,7 @@ Tooltip.Floating = function TooltipFloating({ wire, mingleData, children }) {
         label,
         color,
         offset,
-        position,
+        position = 'top',
         withArrow,
         arrowSize,
         arrowRadius,
@@ -83,22 +96,31 @@ Tooltip.Floating = function TooltipFloating({ wire, mingleData, children }) {
     } = mingleData;
 
     return (
-        <MantineTooltip.Floating
-            label={label}
-            color={color}
-            offset={offset}
-            position={position}
-            withArrow={withArrow}
-            arrowSize={arrowSize}
-            arrowRadius={arrowRadius}
-            arrowPosition={arrowPosition}
-            arrowOffset={arrowOffset}
-            transitionProps={transitionProps}
-            classNames={classNames}
-            styles={styles}
-        >
-            {children}
-        </MantineTooltip.Floating>
+        <AnimatePresence mode="wait">
+            <MotionFloating
+                label={label}
+                color={color}
+                offset={offset}
+                position={position}
+                withArrow={withArrow}
+                arrowSize={arrowSize}
+                arrowRadius={arrowRadius}
+                arrowPosition={arrowPosition}
+                arrowOffset={arrowOffset}
+                transitionProps={{ duration: 0 }}
+                classNames={classNames}
+                styles={{
+                    ...styles,
+                    tooltip: {
+                        ...styles?.tooltip,
+                        transition: 'none',
+                    },
+                }}
+                {...overlayAnimations.getPositionAnimation(position, 'tooltip')}
+            >
+                {children}
+            </MotionFloating>
+        </AnimatePresence>
     );
 };
 

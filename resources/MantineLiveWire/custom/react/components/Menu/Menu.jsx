@@ -1,5 +1,13 @@
 import React from 'react';
 import { Menu as MantineMenu } from '@mantine/core';
+import { motion, AnimatePresence } from 'motion/react';
+import { overlayAnimations, springs, interactive, layout, stagger } from '../../utils/animations';
+
+// Motion-enhanced components
+const MotionDropdown = motion(MantineMenu.Dropdown);
+const MotionItem = motion(MantineMenu.Item);
+const MotionLabel = motion(MantineMenu.Label);
+const MotionDivider = motion(MantineMenu.Divider);
 
 function Menu({ wire, mingleData, children }) {
     const {
@@ -11,7 +19,7 @@ function Menu({ wire, mingleData, children }) {
         loop,
         closeOnItemClick,
         closeOnEscape,
-        position,
+        position = 'bottom',
         offset,
         withArrow,
         transitionProps,
@@ -37,14 +45,20 @@ function Menu({ wire, mingleData, children }) {
             position={position}
             offset={offset}
             withArrow={withArrow}
-            transitionProps={transitionProps}
+            transitionProps={{ duration: 0 }} // Disable Mantine's transitions
             width={width}
             shadow={shadow}
             withinPortal={withinPortal}
             trapFocus={trapFocus}
             menuItemTabIndex={menuItemTabIndex}
             classNames={classNames}
-            styles={styles}
+            styles={{
+                ...styles,
+                dropdown: {
+                    ...styles?.dropdown,
+                    transition: 'none',
+                },
+            }}
         >
             {children}
         </MantineMenu>
@@ -56,31 +70,66 @@ Menu.Target = function MenuTarget({ wire, mingleData, children }) {
 };
 
 Menu.Dropdown = function MenuDropdown({ wire, mingleData, children }) {
-    return <MantineMenu.Dropdown>{children}</MantineMenu.Dropdown>;
+    const { position = 'bottom' } = mingleData;
+
+    return (
+        <AnimatePresence mode="wait">
+            <MotionDropdown
+                {...mingleData}
+                {...overlayAnimations.getPositionAnimation(position, 'popover')}
+            >
+                <motion.div
+                    {...stagger.container}
+                >
+                    {children}
+                </motion.div>
+            </MotionDropdown>
+        </AnimatePresence>
+    );
 };
 
 Menu.Item = function MenuItem({ wire, mingleData, children }) {
     const { color, disabled, leftSection, rightSection, component } = mingleData;
 
     return (
-        <MantineMenu.Item
+        <MotionItem
             color={color}
             disabled={disabled}
             leftSection={leftSection}
             rightSection={rightSection}
             component={component}
+            {...stagger.item}
+            {...(disabled ? {} : interactive.button)}
         >
             {children}
-        </MantineMenu.Item>
+        </MotionItem>
     );
 };
 
 Menu.Label = function MenuLabel({ wire, mingleData, children }) {
-    return <MantineMenu.Label>{children}</MantineMenu.Label>;
+    return (
+        <MotionLabel
+            {...stagger.item}
+            initial={{ opacity: 0, y: 5 }}
+            animate={{ opacity: 0.6, y: 0 }}
+            exit={{ opacity: 0, y: -5 }}
+            transition={springs.default}
+        >
+            {children}
+        </MotionLabel>
+    );
 };
 
 Menu.Divider = function MenuDivider({ wire, mingleData }) {
-    return <MantineMenu.Divider />;
+    return (
+        <MotionDivider
+            {...stagger.item}
+            initial={{ opacity: 0, scaleX: 0 }}
+            animate={{ opacity: 1, scaleX: 1 }}
+            exit={{ opacity: 0, scaleX: 0 }}
+            transition={springs.default}
+        />
+    );
 };
 
 export default Menu;

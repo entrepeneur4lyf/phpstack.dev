@@ -1,5 +1,10 @@
 import React from 'react';
 import { HoverCard as MantineHoverCard } from '@mantine/core';
+import { motion, AnimatePresence } from 'motion/react';
+import { overlayAnimations, springs, layout } from '../../utils/animations';
+
+// Motion-enhanced components
+const MotionDropdown = motion(MantineHoverCard.Dropdown);
 
 function HoverCard({ wire, mingleData, children }) {
     const {
@@ -8,7 +13,7 @@ function HoverCard({ wire, mingleData, children }) {
         openDelay,
         closeDelay,
         withArrow,
-        position,
+        position = 'bottom',
         offset,
         classNames,
         styles,
@@ -24,7 +29,15 @@ function HoverCard({ wire, mingleData, children }) {
             position={position}
             offset={offset}
             classNames={classNames}
-            styles={styles}
+            styles={{
+                ...styles,
+                dropdown: {
+                    ...styles?.dropdown,
+                    // Remove Mantine's transitions
+                    transition: 'none',
+                },
+            }}
+            transitionProps={{ duration: 0 }} // Disable Mantine's transitions
         >
             {children}
         </MantineHoverCard>
@@ -36,7 +49,23 @@ HoverCard.Target = function HoverCardTarget({ wire, mingleData, children }) {
 };
 
 HoverCard.Dropdown = function HoverCardDropdown({ wire, mingleData, children }) {
-    return <MantineHoverCard.Dropdown>{children}</MantineHoverCard.Dropdown>;
+    const { position = 'bottom' } = mingleData;
+
+    return (
+        <AnimatePresence mode="wait">
+            <MotionDropdown
+                {...mingleData}
+                {...overlayAnimations.getPositionAnimation(position, 'hover')}
+            >
+                <motion.div
+                    {...layout.content}
+                    transition={springs.snappy}
+                >
+                    {children}
+                </motion.div>
+            </MotionDropdown>
+        </AnimatePresence>
+    );
 };
 
 export default HoverCard;
