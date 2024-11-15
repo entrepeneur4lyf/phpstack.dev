@@ -79,10 +79,10 @@ window.ReactDOM = ReactDOM;
 window.createRoot = createRoot;
 
 // Import required stylesheets
-{$this->getStylesheetImports()}
+{static::getStylesheetImports()}
 
 // Import and register components
-{$this->getComponentImports()}
+{static::getComponentImports()}
 JS;
     }
 
