@@ -102,6 +102,18 @@ export const presets = {
         },
         duration: 0.15,
         ease: [0.4, 0, 0.2, 1]
+    },
+
+    // Smooth animations for data visualization
+    chart: {
+        spring: {
+            type: "spring",
+            stiffness: 300,
+            damping: 30,
+            mass: 0.8
+        },
+        duration: 0.6,
+        ease: [0.34, 1.56, 0.64, 1]
     }
 };
 
@@ -118,7 +130,8 @@ export const springs = {
     expand: presets.expand.spring,
     feedback: presets.feedback.spring,
     notification: presets.notification.spring,
-    input: presets.input.spring
+    input: presets.input.spring,
+    chart: presets.chart.spring
 };
 
 // Duration-based transitions
